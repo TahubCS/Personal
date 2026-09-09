@@ -6,6 +6,7 @@ import ContextTrace from '../features/context-trace/ContextTrace';
 import TraceTranscript from '../features/context-trace/TraceTranscript.astro';
 import ProjectStory from '../components/ProjectStory.astro';
 import { projects } from '../data/projects';
+import ContactFooter from '../components/ContactFooter.astro';
 ---
 
 <BaseLayout>
@@ -44,9 +45,20 @@ import { projects } from '../data/projects';
         happens underneath.
       </h2>
       <p class="muted">
-        I’m interested in NLP, AI agents, and the engineering that makes them
-        useful.
+        At East Carolina University, my interests sit between software
+        engineering and applied AI: how information is retrieved, how an agent
+        uses it, and how a person understands the result. I enjoy following a
+        feature across the interface, API, and data layer instead of treating
+        those boundaries as separate problems.
+      </p>
+      <p class="muted">
+        These projects reflect that curiosity. They have led me into repository
+        indexing, embeddable SDKs, and streaming study tools. I care about
+        making the implementation inspectable, naming its limitations, and
+        keeping the experience clear enough that someone else can use it. I’m
+        looking to deepen that work with a team building useful systems.
       </p>
     </section>
   </main>
+  <ContactFooter />
 </BaseLayout>

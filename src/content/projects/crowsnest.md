@@ -12,6 +12,8 @@ The project began around an ECU hackathon and continued beyond the initial event
 
 ## My contribution
 
+This was a hackathon-winning team project. The specific award category and event details are not listed here until they can be attributed precisely.
+
 My commits cover database and study-plan functionality, integration of shared study resources, and streaming AI tutor behavior. The [study-resource commit](https://github.com/TahubCS/TheCrowsNest/commit/353d0960f25c3c075966fd91b617685984df0e54) connects shared resource generation, material coverage, API responses, and study-plan updates. The [streaming-tutor commit](https://github.com/TahubCS/TheCrowsNest/commit/5500d953b9cb71c63178422cd9c34ab08c1f6f86) connects the Python stream, application route, and browser consumption of that stream.
 
 Working across these boundaries is the main story: a backend feature is only useful when the interface can represent its progress and results clearly.

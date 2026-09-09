@@ -33,6 +33,24 @@
 }
 .trace-stages li {
   min-width: 0;
+  position: relative;
+}
+.trace-stages li + li::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 1px;
+  left: -12px;
+  top: 80px;
+  background: var(--boundary);
+}
+@media (max-width: 767px) {
+  .trace-stages li + li::before {
+    width: 1px;
+    height: 8px;
+    left: 24px;
+    top: -8px;
+  }
 }
 .stage {
   width: 100%;

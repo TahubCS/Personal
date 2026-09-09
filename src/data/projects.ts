@@ -5,6 +5,8 @@ export const projects = [
     name: 'Context Compiler',
     category: 'Developer tools / Retrieval',
     summary: 'The right repository context, in the hands of your AI agent.',
+    explanation:
+      'A web application and local MCP bridge make indexed code available through search, grounded questions, and context packs. The interesting challenge is selecting a useful working set without hiding where it came from.',
     url: 'https://context-compiler-xv35.vercel.app/',
     repo: 'https://github.com/TahubCS/Context-Compiler',
     stack: ['TypeScript', 'Python', 'MCP', 'pgvector'],
@@ -28,6 +30,8 @@ export const projects = [
     category: 'Support systems / SDK',
     summary:
       'AI support that knows when to bring a person into the conversation.',
+    explanation:
+      'The published browser widget connects product knowledge with streamed replies and an agent workspace. Its React and headless entry points let a host application choose how much of the interface it wants to own.',
     url: 'https://supo-mu.vercel.app/',
     repo: 'https://github.com/TahubCS/Supo',
     stack: ['TypeScript', 'AI SDK', 'PostgreSQL', 'Ably'],
@@ -51,6 +55,8 @@ export const projects = [
     category: 'Collaborative learning / AI',
     summary:
       'Shared course materials become a starting point for better study.',
+    explanation:
+      'Course-specific retrieval connects uploaded material to flashcards, practice questions, study plans, and tutor conversations. The work crosses a Next.js application, a Python service, and the data that keeps shared resources organized.',
     url: 'https://thecrowsnest.vercel.app/',
     repo: 'https://github.com/TahubCS/TheCrowsNest',
     stack: ['Next.js', 'FastAPI', 'Supabase', 'Gemini'],

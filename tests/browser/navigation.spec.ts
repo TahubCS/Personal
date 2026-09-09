@@ -31,7 +31,7 @@ test('essential content and native menu work without JavaScript', async ({
     viewport: { width: 390, height: 844 },
   });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:4321');
+  await page.goto('http://127.0.0.1:4322');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.locator('.mobile-nav summary').click();
   await expect(

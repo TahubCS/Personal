@@ -26,7 +26,7 @@ test('playback pauses offscreen and resumes without external requests', async ({
 }) => {
   const external: string[] = [];
   page.on('request', (request) => {
-    if (!request.url().startsWith('http://127.0.0.1:4321'))
+    if (!request.url().startsWith('http://127.0.0.1:4322'))
       external.push(request.url());
   });
   await page.goto('/#trace');
@@ -55,7 +55,7 @@ test('the complete transcript is available without JavaScript', async ({
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:4321/#trace');
+  await page.goto('http://127.0.0.1:4322/#trace');
   await page
     .getByText('Read the complete request flow', { exact: true })
     .click();

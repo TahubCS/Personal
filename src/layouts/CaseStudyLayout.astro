@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import ArchitectureFigure from '../components/ArchitectureFigure.astro';
 import type { Project } from '../data/projects';
+import ContactFooter from '../components/ContactFooter.astro';
 interface Props {
   project: Project;
   title: string;
@@ -48,6 +49,7 @@ const { project, title, description } = Astro.props;
       </div>
     </section>
   </main>
+  <ContactFooter />
 </BaseLayout>
 <style>
   .case-hero {

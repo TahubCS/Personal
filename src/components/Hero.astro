@@ -98,6 +98,7 @@ import ProjectIndex from './ProjectIndex.astro';
   }
   .identity {
     grid-area: identity;
+    min-width: 0;
   }
   .intro-label {
     margin-bottom: 20px;
@@ -140,8 +141,20 @@ import ProjectIndex from './ProjectIndex.astro';
   }
   .hero-study {
     grid-area: study;
+    min-width: 0;
+    animation: arrive 450ms ease-out both;
     margin: 0;
     border: 1px solid var(--line);
+  }
+  @keyframes arrive {
+    from {
+      opacity: 0.6;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .study-caption {
     display: flex;
@@ -227,7 +240,7 @@ import ProjectIndex from './ProjectIndex.astro';
       display: none;
     }
     .hero-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'identity' 'index' 'study';
     }
     .hero-study {

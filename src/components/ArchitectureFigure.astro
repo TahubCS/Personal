@@ -16,11 +16,6 @@ const { project } = Astro.props;
       <li>
         <span class="eyebrow">0{index + 1}</span>
         <strong>{step}</strong>
-        {index < project.flow.length - 1 && (
-          <span class="flow-arrow" aria-hidden="true">
-            ↓
-          </span>
-        )}
       </li>
     ))}
   </ol>
