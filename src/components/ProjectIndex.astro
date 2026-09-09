@@ -4,7 +4,7 @@ import { projects } from '../data/projects';
 
 <nav id="work" class="project-index" aria-label="Selected projects">
   {projects.map((project) => (
-    <a href={project.url}>
+    <a href={`/work/${project.slug}/`}>
       <span class="eyebrow">
         {project.number} / {project.category}
       </span>

@@ -4,6 +4,8 @@ import SiteHeader from '../components/SiteHeader.astro';
 import Hero from '../components/Hero.astro';
 import ContextTrace from '../features/context-trace/ContextTrace';
 import TraceTranscript from '../features/context-trace/TraceTranscript.astro';
+import ProjectStory from '../components/ProjectStory.astro';
+import { projects } from '../data/projects';
 ---
 
 <BaseLayout>
@@ -20,6 +22,20 @@ import TraceTranscript from '../features/context-trace/TraceTranscript.astro';
       </p>
       <ContextTrace client:visible />
       <TraceTranscript />
+    </section>
+    <section id="stories" class="paper">
+      <div class="shell section">
+        <p class="eyebrow">Selected work / 01—03</p>
+        <h2>Built around real questions.</h2>
+        <p>
+          Each project explores a different interface between information and
+          people. Here are the systems, the decisions behind them, and the
+          contributions I can point to in code.
+        </p>
+        {projects.map((project) => (
+          <ProjectStory project={project} />
+        ))}
+      </div>
     </section>
     <section id="about" class="shell section rule">
       <h2>

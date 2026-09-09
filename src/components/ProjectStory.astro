@@ -1,0 +1,83 @@
+---
+import type { Project } from '../data/projects';
+import ArchitectureFigure from './ArchitectureFigure.astro';
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<article class="project-story" id={project.slug}>
+  <div class="story-copy">
+    <p class="eyebrow">
+      {project.number} / {project.category}
+    </p>
+    <h3>
+      <a href={`/work/${project.slug}/`}>{project.name}</a>
+    </h3>
+    <p class="story-summary">{project.summary}</p>
+    <p>{project.contribution}</p>
+    <p class="story-limit">{project.limitation}</p>
+    <ul class="stack" aria-label="Technologies">
+      {project.stack.map((tech) => (
+        <li>{tech}</li>
+      ))}
+    </ul>
+    <a class="case-link" href={`/work/${project.slug}/`}>
+      Read the engineering story <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+  <ArchitectureFigure project={project} />
+</article>
+<style>
+  .project-story {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 8%;
+    padding: 64px 0;
+    border-top: 1px solid #bcc4c0;
+    align-items: center;
+  }
+  .story-copy h3 a {
+    text-decoration: none;
+  }
+  .story-summary {
+    font-size: 21px;
+    line-height: 1.45;
+  }
+  .story-copy > p:not(.story-summary):not(.eyebrow) {
+    font-size: 15px;
+    color: #46575a;
+  }
+  .story-limit {
+    font-size: 13px !important;
+  }
+  .stack {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0;
+    padding: 0;
+    font: 11px var(--mono);
+    color: #46575a;
+  }
+  .case-link {
+    font-size: 14px;
+    display: inline-block;
+    padding-block: 12px;
+  }
+  .case-link span {
+    margin-left: 20px;
+  }
+  @media (max-width: 767px) {
+    .project-story {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 40px 0;
+    }
+    .story-summary {
+      font-size: 19px;
+    }
+  }
+</style>

@@ -17,6 +17,7 @@ export default defineConfig(
         URL: 'readonly',
         document: 'readonly',
         innerWidth: 'readonly',
+        window: 'readonly',
       },
     },
   },

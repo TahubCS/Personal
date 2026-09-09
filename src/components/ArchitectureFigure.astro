@@ -1,0 +1,104 @@
+---
+import type { Project } from '../data/projects';
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<figure class:list={['architecture', project.slug]}>
+  <div class="figure-top eyebrow">
+    <span>Fig. {project.number} / System overview</span>
+    <span>Architecture illustration</span>
+  </div>
+  <ol>
+    {project.flow.map((step, index) => (
+      <li>
+        <span class="eyebrow">0{index + 1}</span>
+        <strong>{step}</strong>
+        {index < project.flow.length - 1 && (
+          <span class="flow-arrow" aria-hidden="true">
+            ↓
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+  <figcaption>
+    {project.slug === 'supo'
+      ? 'Conversation continuity across an AI-to-human boundary.'
+      : project.slug === 'crowsnest'
+        ? 'From a shared material to class-specific study context.'
+        : 'Index preparation and query handling are separate paths.'}
+  </figcaption>
+</figure>
+<style>
+  .architecture {
+    margin: 0;
+    border: 1px solid #97a5a4;
+    background: #e7e8df;
+    color: var(--ink);
+  }
+  .figure-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid #a9b4ad;
+    padding: 16px 24px;
+    font-size: 10px;
+    color: #46575a;
+  }
+  .architecture ol {
+    list-style: none;
+    margin: 0;
+    padding: 32px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 40px;
+  }
+  .architecture li {
+    position: relative;
+    border-top: 1px solid #788985;
+    padding: 16px 0 22px;
+  }
+  .architecture strong {
+    display: block;
+    font: 500 28px/1.15 var(--display);
+    letter-spacing: -0.035em;
+    margin-top: 12px;
+  }
+  .architecture .eyebrow {
+    color: #46575a;
+  }
+  .flow-arrow {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    color: #46575a;
+  }
+  figcaption {
+    font-size: 12px;
+    border-top: 1px solid #a9b4ad;
+    padding: 16px 24px;
+    color: #46575a;
+  }
+  .supo {
+    background: #dce5e4;
+  }
+  .crowsnest {
+    background: #e8e1d2;
+  }
+  @media (max-width: 767px) {
+    .figure-top {
+      padding: 16px;
+      flex-direction: column;
+    }
+    .architecture ol {
+      padding: 24px;
+      gap: 16px;
+    }
+    .architecture strong {
+      font-size: 22px;
+    }
+  }
+</style>
