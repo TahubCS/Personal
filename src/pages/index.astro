@@ -1,27 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/Hero.astro';
 ---
 
 <BaseLayout>
-  <main id="main" class="shell section">
-    <p class="eyebrow">MTK / SYSTEMS OBSERVATORY</p>
-    <h1>
-      Information.
-      <br />
-      <span class="accent">Made useful.</span>
-    </h1>
-    <p>
-      Software engineering and applied AI. A foundation for exploring the
-      systems behind the interface.
-    </p>
-    <div class="rule section">
-      <h2>Built with intention.</h2>
+  <SiteHeader />
+  <main id="main">
+    <Hero />
+    <section id="work" class="shell section">
+      <p class="eyebrow">01 / Selected work</p>
+      <h2>Systems with a purpose.</h2>
       <p class="muted">
-        Space Grotesk, a quiet technical palette, and room to think.
+        Repository context. Customer support. Collaborative learning.
       </p>
-      <a class="button" href="https://github.com/TahubCS">
-        Explore GitHub ↗
-      </a>
-    </div>
+    </section>
+    <section id="about" class="shell section rule">
+      <h2>
+        Curious about what
+        <br />
+        happens underneath.
+      </h2>
+      <p class="muted">
+        I’m interested in NLP, AI agents, and the engineering that makes them
+        useful.
+      </p>
+    </section>
   </main>
-</BaseLayout>
+  </BaseLayout>

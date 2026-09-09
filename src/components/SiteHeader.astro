@@ -1,0 +1,117 @@
+---
+import { profile } from '../data/profile';
+---
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="wordmark" href="/" aria-label="Tahub Khatri, home">
+      tk<span>.</span>
+    </a>
+    <p class="header-note eyebrow">Software / Applied AI</p>
+    <nav aria-label="Main navigation" class="desktop-nav">
+      <a href="/#work">Work</a>
+      <a href="/#about">About</a>
+      <a href={profile.github}>GitHub ↗</a>
+    </nav>
+    <details class="mobile-nav">
+      <summary>Menu</summary>
+      <nav aria-label="Mobile navigation">
+        <a href="/#work">Work</a>
+        <a href="/#about">About</a>
+        <a href={profile.github}>GitHub ↗</a>
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-nav');
+  menu?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.open = false;
+    });
+  });
+</script>
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .wordmark {
+    font-family: var(--display);
+    font-size: 34px;
+    letter-spacing: -0.08em;
+    text-decoration: none;
+  }
+  .wordmark span {
+    color: var(--accent);
+  }
+  .header-note {
+    margin: 0;
+  }
+  .desktop-nav {
+    display: flex;
+    margin-left: auto;
+    gap: 36px;
+  }
+  nav a {
+    font-size: 14px;
+    text-decoration: none;
+    padding-block: 12px;
+  }
+  nav a:hover {
+    color: var(--accent);
+  }
+  .mobile-nav {
+    display: none;
+    margin-left: auto;
+  }
+  summary {
+    cursor: pointer;
+    padding: 12px;
+  }
+  @media (max-width: 767px) {
+    .header-inner {
+      min-height: 64px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-note {
+      font-size: 10px;
+    }
+    .desktop-nav {
+      display: none;
+    }
+    .mobile-nav {
+      display: block;
+    }
+    .mobile-nav[open] {
+      width: 100%;
+      padding-bottom: 16px;
+    }
+    .mobile-nav[open] summary {
+      position: absolute;
+      right: 20px;
+      top: 9px;
+    }
+    .mobile-nav nav {
+      display: flex;
+      gap: 28px;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>
