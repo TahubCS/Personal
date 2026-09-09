@@ -1,0 +1,74 @@
+---
+import { projects } from '../data/projects';
+---
+
+<nav id="work" class="project-index" aria-label="Selected projects">
+  {projects.map((project) => (
+    <a href={project.url}>
+      <span class="eyebrow">
+        {project.number} / {project.category}
+      </span>
+      <span class="project-name">
+        {project.name}
+        <span aria-hidden="true">↗</span>
+      </span>
+    </a>
+  ))}
+</nav>
+<style>
+  .project-index {
+    grid-area: index;
+  }
+  .project-index {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-block: 1px solid var(--line);
+    grid-column: 1/-1;
+    margin-top: 16px;
+  }
+  .project-index a {
+    padding: 22px 24px;
+    text-decoration: none;
+    min-width: 0;
+  }
+  .project-index a:first-child {
+    padding-left: 0;
+  }
+  .project-index a + a {
+    border-left: 1px solid var(--line);
+  }
+  .project-name {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font: 500 24px var(--display);
+    letter-spacing: -0.035em;
+    margin-top: 8px;
+  }
+  .project-name > span {
+    color: var(--accent);
+  }
+  .eyebrow {
+    font-size: 10px;
+  }
+  .project-index a:hover .project-name {
+    color: var(--accent);
+  }
+  @media (max-width: 767px) {
+    .project-index {
+      grid-template-columns: 1fr;
+      margin-top: 0;
+    }
+    .project-index a,
+    .project-index a:first-child {
+      padding: 16px 0;
+    }
+    .project-index a + a {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+    .project-name {
+      font-size: 22px;
+    }
+  }
+</style>

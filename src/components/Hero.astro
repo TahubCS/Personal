@@ -1,5 +1,6 @@
 ---
 import { profile } from '../data/profile';
+import ProjectIndex from './ProjectIndex.astro';
 ---
 
 <section class="hero shell" aria-labelledby="identity">
@@ -29,6 +30,7 @@ import { profile } from '../data/profile';
         </a>
       </div>
     </div>
+    <ProjectIndex />
     <figure
       class="hero-study"
       aria-label="Architecture illustration: a question becomes context, then useful output"
@@ -85,13 +87,17 @@ import { profile } from '../data/profile';
     gap: 20px;
   }
   .hero-top {
-    margin-bottom: 58px;
+    margin-bottom: 32px;
   }
   .hero-grid {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
     gap: 7%;
     align-items: center;
+    grid-template-areas: 'identity study' 'index index';
+  }
+  .identity {
+    grid-area: identity;
   }
   .intro-label {
     margin-bottom: 20px;
@@ -133,6 +139,7 @@ import { profile } from '../data/profile';
     border-top: 1px solid var(--line);
   }
   .hero-study {
+    grid-area: study;
     margin: 0;
     border: 1px solid var(--line);
   }
@@ -221,6 +228,7 @@ import { profile } from '../data/profile';
     }
     .hero-grid {
       grid-template-columns: 1fr;
+      grid-template-areas: 'identity' 'index' 'study';
     }
     .hero-study {
       margin-top: 16px;
