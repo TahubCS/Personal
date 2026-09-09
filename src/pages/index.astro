@@ -2,18 +2,24 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import Hero from '../components/Hero.astro';
+import ContextTrace from '../features/context-trace/ContextTrace';
+import TraceTranscript from '../features/context-trace/TraceTranscript.astro';
 ---
 
 <BaseLayout>
   <SiteHeader />
   <main id="main">
     <Hero />
-    <section id="stories" class="shell section">
-      <p class="eyebrow">01 / Selected work</p>
-      <h2>Systems with a purpose.</h2>
+    <section id="trace" class="shell section">
+      <p class="eyebrow">Inside the system / Context Compiler</p>
+      <h2>Follow the question.</h2>
       <p class="muted">
-        Repository context. Customer support. Collaborative learning.
+        An agent needs more than a repository. It needs the right pieces of it.
+        Explore how a search moves through authentication, embeddings, and
+        retrieval to become useful context.
       </p>
+      <ContextTrace client:visible />
+      <TraceTranscript />
     </section>
     <section id="about" class="shell section rule">
       <h2>

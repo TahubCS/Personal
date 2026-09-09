@@ -1,0 +1,45 @@
+---
+import { stages, sourceUrl } from './trace-data';
+---
+
+<details class="transcript">
+  <summary>Read the complete request flow</summary>
+  <div>
+    <p>
+      This is an illustration of the implemented search path, not a recording of
+      a production request. Index preparation happens separately.
+    </p>
+    <ol>
+      {stages.map((stage) => (
+        <li>
+          <strong>{stage.title}.</strong> {stage.detail}{' '}
+          <a href={sourceUrl(stage.file)}>Source implementation</a>
+        </li>
+      ))}
+    </ol>
+    <p>
+      An invalid key stops at authentication. An empty search returns no
+      matches. Neither outcome should be presented as a successful generated
+      answer.
+    </p>
+  </div>
+</details>
+<style>
+  .transcript {
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+  }
+  .transcript summary {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 0;
+  }
+  .transcript > div {
+    max-width: 75ch;
+    padding-top: 20px;
+    color: var(--muted);
+  }
+  li {
+    margin-bottom: 18px;
+  }
+</style>

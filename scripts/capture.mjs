@@ -14,6 +14,16 @@ for (const viewport of [
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('http://127.0.0.1:4321/', { waitUntil: 'networkidle' });
+  if (milestone === 'D') {
+    await page.locator('#trace').scrollIntoViewIfNeeded();
+    await page
+      .locator('.trace')
+      .getByRole('button', { name: /Application API/ })
+      .click();
+    await page
+      .locator('.trace')
+      .screenshot({ path: `artifacts/D-trace-${viewport.width}.png` });
+  }
   await page.screenshot({
     path: `artifacts/${milestone}-${viewport.width}.png`,
     fullPage: true,

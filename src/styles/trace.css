@@ -1,0 +1,198 @@
+.trace {
+  border: 1px solid var(--boundary);
+  margin-top: 40px;
+}
+.trace-toolbar {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+.trace-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.trace select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--boundary);
+  padding: 10px;
+  min-height: 44px;
+}
+.trace-stages {
+  padding: 32px 24px;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.trace-stages li {
+  min-width: 0;
+}
+.stage {
+  width: 100%;
+  min-height: 160px;
+  background: transparent;
+  text-align: left;
+  padding: 16px;
+  border: 1px solid var(--boundary);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition:
+    background 0.24s,
+    border-color 0.24s;
+}
+.stage-number {
+  font: 14px var(--mono);
+  color: var(--accent);
+}
+.stage-operation {
+  font-size: 12px;
+  color: var(--muted);
+}
+.stage.active {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.stage.active .stage-number {
+  background: var(--accent);
+  color: var(--ink);
+  width: 28px;
+  text-align: center;
+}
+.trace button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.index-note {
+  display: flex;
+  gap: 24px;
+  padding: 0 24px 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.trace-inspector {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+  padding: 32px;
+  background: var(--surface);
+  min-height: 310px;
+}
+.trace-inspector h3 {
+  font-size: 36px;
+  max-width: 20ch;
+}
+.trace-inspector p {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+.trace-evidence {
+  border-left: 1px solid var(--boundary);
+  padding-left: 32px;
+  min-width: 0;
+}
+.trace-evidence code {
+  display: block;
+  overflow-wrap: anywhere;
+  font: 14px/1.6 var(--mono);
+  margin: 24px 0;
+}
+.trace-evidence a {
+  font: 13px/1.6 var(--mono);
+  overflow-wrap: anywhere;
+  color: var(--accent);
+}
+.trace-evidence p {
+  font-size: 12px;
+  margin-top: 28px;
+}
+.trace-controls {
+  padding: 20px 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.reset {
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  min-height: 44px;
+  padding: 10px;
+  font-size: 14px;
+}
+.trace-status {
+  margin-left: auto;
+  font: 11px var(--mono);
+  color: var(--muted);
+}
+@media (max-width: 767px) {
+  .trace-toolbar {
+    align-items: start;
+    flex-direction: column;
+    padding: 16px;
+  }
+  .trace-stages {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 8px;
+  }
+  .stage {
+    min-height: 64px;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+  }
+  .stage-operation {
+    grid-column: 2;
+  }
+  .stage-number {
+    grid-row: 1/3;
+  }
+  .index-note {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 16px 24px;
+  }
+  .trace-inspector {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 16px;
+    min-height: 540px;
+  }
+  .trace-inspector h3 {
+    font-size: 30px;
+  }
+  .trace-evidence {
+    border-left: 0;
+    border-top: 1px solid var(--boundary);
+    padding: 20px 0 0;
+  }
+  .trace-evidence code {
+    margin: 12px 0;
+  }
+  .trace-evidence p {
+    margin-top: 12px;
+  }
+  .trace-controls {
+    padding: 16px;
+    gap: 8px;
+  }
+  .trace-controls .button {
+    padding: 10px 13px;
+  }
+  .trace-status {
+    margin: 8px 0 0;
+    width: 100%;
+  }
+}
