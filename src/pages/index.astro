@@ -21,9 +21,18 @@ import ContactFooter from '../components/ContactFooter.astro';
         Explore how a search moves through authentication, embeddings, and
         retrieval to become useful context.
       </p>
-      <ContextTrace client:visible />
+      <div class="trace-runway">
+        <ContextTrace client:visible />
+      </div>
       <TraceTranscript />
     </section>
+    <div class="paper-portal" data-motion="paper" aria-hidden="true">
+      <div class="portal-sheet">
+        <span class="eyebrow">Context / becomes</span>
+        <span class="portal-word">Useful.</span>
+        <span class="portal-foot">One working set. Many possibilities.</span>
+      </div>
+    </div>
     <section id="stories" class="paper">
       <div class="shell section">
         <p class="eyebrow">Selected work / 01—03</p>
@@ -38,11 +47,14 @@ import ContactFooter from '../components/ContactFooter.astro';
         ))}
       </div>
     </section>
+    <div class="return-portal" data-motion="return" aria-hidden="true">
+      <span>Information → product → contribution</span>
+      <i></i>
+    </div>
     <section id="about" class="shell section rule">
-      <h2>
-        Curious about what
-        <br />
-        happens underneath.
+      <h2 aria-label="Curious about what happens underneath">
+        <span>Curious about what</span>{' '}
+        <span class="line-break">happens underneath.</span>
       </h2>
       <p class="muted">
         At East Carolina University, my interests sit between software

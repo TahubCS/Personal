@@ -1,5 +1,9 @@
 # Verification log
 
+## September 10 motion redesign
+
+The local motion-narrative branch adds a continuous question-to-context composition. See motion-storyboard.md for the initial audit/section gates and motion-review.md for full results and screenshots. Final executed checks: Prettier, ESLint, Astro check (44 files, no diagnostics), six reducer tests, 36 Chrome/Edge tests, five-output production build, 16 route/viewport Axe/overflow/error audits. Normal/reduced-motion scroll reviews covered 390×844, 768×1024 and 1440×900, with 320px reflow and simulated 200% text enlargement also checked. Actual mobile case-study composition and sticky positioning have regression coverage. Measured loading CLS and scroll-sample shift are zero. Final Lighthouse performance varied 84/100/100; the slow run and remaining manual checks are explicitly retained in the motion report. No production deployment or push was performed.
+
 Only executed checks are recorded as passed. Milestones A–F have passed their available engineering gates. Screenshots and machine-readable reports live under artifacts/. These results do not constitute a complete manual accessibility or physical-device certification.
 
 Publication limitations: email and resume not supplied; omitted. CrowsNest's hackathon win is confirmed by the user; only event/category/date/results attribution remains unspecified. Complete ownership declarations are not assumed. GitHub remains an actual working destination.

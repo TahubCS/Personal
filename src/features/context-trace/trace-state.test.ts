@@ -22,6 +22,7 @@ test('invalid credentials stop before embeddings and changing outcome resets pla
   assert.equal(state.status, 'complete');
   assert.deepEqual(traceReducer(state, { type: 'outcome', outcome: 'empty' }), {
     ...initialState,
+    source: 'manual',
     outcome: 'empty',
   });
 });
@@ -49,4 +50,29 @@ test('direct navigation is bounded by the selected outcome', () => {
     ).step,
     2,
   );
+});
+
+test('manual ownership survives scrolling until explicitly reattached', () => {
+  const scrolling = traceReducer(initialState, {
+    type: 'scroll',
+    progress: 0.7,
+  });
+  assert.equal(scrolling.step, 4);
+  const manual = traceReducer(scrolling, { type: 'select', step: 2 });
+  assert.deepEqual(
+    traceReducer(manual, { type: 'scroll', progress: 1 }),
+    manual,
+  );
+  assert.equal(
+    traceReducer(manual, { type: 'follow-scroll', progress: 1 }).step,
+    5,
+  );
+});
+
+test('scroll reverses deterministically and rejects invalid progress', () => {
+  const end = traceReducer(initialState, { type: 'scroll', progress: 1 });
+  assert.equal(traceReducer(end, { type: 'scroll', progress: 0.2 }).step, 1);
+  assert.deepEqual(traceReducer(end, { type: 'scroll', progress: NaN }), end);
+  const failed = { ...initialState, outcome: 'invalid-key' as const };
+  assert.equal(traceReducer(failed, { type: 'scroll', progress: 1 }).step, 2);
 });

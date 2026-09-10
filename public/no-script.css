@@ -1,0 +1,6 @@
+.trace-runway::after {
+  display: none !important;
+}
+.trace {
+  position: static !important;
+}

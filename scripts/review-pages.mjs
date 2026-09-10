@@ -4,7 +4,11 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const milestone = process.argv[2] ?? 'E';
 const base = process.env.REVIEW_URL ?? 'http://127.0.0.1:4321';
-const widths = milestone === 'F' ? [320, 390, 768, 1024, 1440] : [390, 1440];
+const widths = milestone.startsWith('motion')
+  ? [320, 390, 768, 1440]
+  : milestone === 'F'
+    ? [320, 390, 768, 1024, 1440]
+    : [390, 1440];
 const paths = [
   '/',
   '/work/context-compiler/',
@@ -18,7 +22,10 @@ await mkdir('artifacts', { recursive: true });
 for (const path of paths) {
   for (const width of widths) {
     const context = await browser.newContext({
-      viewport: { width, height: width < 768 ? 844 : 900 },
+      viewport: {
+        width,
+        height: width < 768 ? 844 : width === 768 ? 1024 : 900,
+      },
     });
     const page = await context.newPage();
     const errors = [];

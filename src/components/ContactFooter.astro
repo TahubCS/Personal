@@ -2,14 +2,18 @@
 import { profile } from '../data/profile';
 ---
 
-<footer id="contact" class="contact-footer">
+<footer id="contact" class="contact-footer" data-motion="contact">
   <div class="shell section">
+    <div class="closing-request" aria-hidden="true">
+      <span class="request-marker"></span>
+      <span>Question → system → context → contribution</span>
+      <span>↗</span>
+    </div>
     <p class="eyebrow">Open to the next challenge</p>
     <div class="contact-grid">
-      <h2>
-        Let's build
-        <br />
-        <span class="accent">something useful.</span>
+      <h2 aria-label="Let's build something useful">
+        <span>Let's build</span>{' '}
+        <span class="accent line-break">something useful.</span>
       </h2>
       <div>
         <p>

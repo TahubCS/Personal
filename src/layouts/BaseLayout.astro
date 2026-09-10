@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/motion.css';
 interface Props {
   title?: string;
   description?: string;
@@ -20,6 +21,9 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
+    <noscript>
+      <link rel="stylesheet" href="/no-script.css" />
+    </noscript>
     <link rel="icon" href="/favicon.svg" />
     <link
       rel="preload"
@@ -34,5 +38,10 @@ const {
       Skip to content
     </a>
     <slot />
+    <script>
+      import { mountPageMotion } from '../features/scroll-narrative/page-motion';
+      const cleanup = mountPageMotion();
+      if (import.meta.hot) import.meta.hot.dispose(cleanup);
+    </script>
   </body>
 </html>

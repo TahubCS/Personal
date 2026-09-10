@@ -1,18 +1,17 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { stages, sourceUrl } from './trace-data';
-import {
-  initialState,
-  lastStep,
-  traceReducer,
-  type Outcome,
-} from './trace-state';
+import { initialState, lastStep, traceReducer } from './trace-state';
 import '../../styles/trace.css';
+import RequestArtifact from './RequestArtifact';
+import { useScrollTrace } from './use-scroll-trace';
 
 export default function ContextTrace() {
   const [state, dispatch] = useReducer(traceReducer, initialState);
   const [ready, setReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+
+  const scrollProgress = useScrollTrace(root, dispatch, reducedMotion);
 
   useEffect(() => {
     setReady(true);
@@ -64,11 +63,17 @@ export default function ContextTrace() {
 
   function changeOutcome(value: string) {
     if (value === 'success' || value === 'invalid-key' || value === 'empty')
-      dispatch({ type: 'outcome', outcome: value as Outcome });
+      dispatch({ type: 'outcome', outcome: value });
   }
 
   return (
-    <div className="trace" ref={root} data-status={state.status}>
+    <div
+      className="trace"
+      ref={root}
+      data-status={state.status}
+      data-source={state.source}
+      data-step={state.step}
+    >
       <div className="trace-toolbar">
         <span className="eyebrow">Context Compiler / Request 001</span>
         <label>
@@ -84,22 +89,26 @@ export default function ContextTrace() {
           </select>
         </label>
       </div>
-      <ol className="trace-stages" aria-label="Request stages">
-        {stages.map((item, index) => (
-          <li key={item.label}>
-            <button
-              className={state.step === index + 1 ? 'stage active' : 'stage'}
-              aria-current={state.step === index + 1 ? 'step' : undefined}
-              disabled={!ready || index + 1 > lastStep(state.outcome)}
-              onClick={() => dispatch({ type: 'select', step: index + 1 })}
-            >
-              <span className="stage-number">0{index + 1}</span>
-              <span>{item.label}</span>
-              <span className="stage-operation">{item.title}</span>
-            </button>
-          </li>
-        ))}
-      </ol>
+      <div className="trace-composition">
+        <ol className="trace-stages" aria-label="Request stages">
+          {stages.map((item, index) => (
+            <li key={item.label}>
+              <button
+                className={state.step === index + 1 ? 'stage active' : 'stage'}
+                aria-current={state.step === index + 1 ? 'step' : undefined}
+                disabled={!ready || index + 1 > lastStep(state.outcome)}
+                onClick={() => dispatch({ type: 'select', step: index + 1 })}
+              >
+                <span className="stage-number">0{index + 1}</span>
+                <span>{item.label}</span>
+                <span className="stage-operation">{item.title}</span>
+                <span className="stage-detail">{item.detail}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <RequestArtifact step={state.step} outcome={state.outcome} />
+      </div>
       <div className="index-note">
         <span className="eyebrow">Prepared separately</span>
         <span>GitHub → scan / chunk / embed → repository index</span>
@@ -117,7 +126,11 @@ export default function ContextTrace() {
         <div className="trace-evidence">
           <span className="eyebrow">Implementation evidence</span>
           <code>{stage?.signal ?? 'authenticateMcpRequest'}</code>
-          {stage && <a href={sourceUrl(stage.file)}>{stage.file} ↗</a>}
+          {stage ? (
+            <a href={sourceUrl(stage.file)}>{`${stage.file} ↗`}</a>
+          ) : (
+            <span className="evidence-placeholder" aria-hidden="true" />
+          )}
           <p>
             Illustrated flow. Curated examples.
             <br />
@@ -164,6 +177,18 @@ export default function ContextTrace() {
         >
           Reset
         </button>
+        <button
+          className="button follow-scroll"
+          disabled={!ready || reducedMotion || state.source === 'scroll'}
+          onClick={() =>
+            dispatch({
+              type: 'follow-scroll',
+              progress: scrollProgress.current,
+            })
+          }
+        >
+          Follow scroll
+        </button>
         <span className="trace-status" role="status">
           {reducedMotion
             ? 'Manual stepping · reduced motion'
@@ -171,7 +196,9 @@ export default function ContextTrace() {
               ? 'Playing illustration'
               : state.status === 'complete'
                 ? 'Illustration complete'
-                : 'Explore at your own pace'}
+                : state.source === 'scroll'
+                  ? 'Scroll to follow the request'
+                  : 'Manual control · scroll paused'}
         </span>
       </div>
     </div>

@@ -7,7 +7,11 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<article class="project-story" id={project.slug}>
+<article
+  class:list={['project-story', `story-${project.slug}`]}
+  id={project.slug}
+  data-motion="story"
+>
   <div class="story-copy">
     <p class="eyebrow">
       {project.number} / {project.category}
@@ -31,7 +35,9 @@ const { project } = Astro.props;
       Read the engineering story <span aria-hidden="true">↗</span>
     </a>
   </div>
-  <ArchitectureFigure project={project} />
+  <div class="story-artifact">
+    <ArchitectureFigure project={project} />
+  </div>
 </article>
 <style>
   .project-story {
@@ -40,7 +46,10 @@ const { project } = Astro.props;
     gap: 8%;
     padding: 64px 0;
     border-top: 1px solid #bcc4c0;
-    align-items: center;
+    align-items: start;
+  }
+  .story-copy {
+    min-width: 0;
   }
   .story-copy h3 a {
     text-decoration: none;

@@ -1,9 +1,10 @@
 ---
 import { profile } from '../data/profile';
 import ProjectIndex from './ProjectIndex.astro';
+import SystemArtifact from './SystemArtifact.astro';
 ---
 
-<section class="hero shell" aria-labelledby="identity">
+<section class="hero shell" data-motion="hero" aria-labelledby="identity">
   <div class="hero-top eyebrow">
     <span>Portfolio / Selected systems</span>
     <span>East Carolina University</span>
@@ -11,10 +12,11 @@ import ProjectIndex from './ProjectIndex.astro';
   <div class="hero-grid">
     <div class="identity">
       <p class="eyebrow intro-label">Hello, I'm</p>
-      <h1 id="identity">
-        Muhammad
-        <br />
-        Tahub <span>Khatri.</span>
+      <h1 id="identity" aria-label="Muhammad Tahub Khatri">
+        <span class="name-first">Muhammad</span>{' '}
+        <span class="line-break">
+          Tahub <em>Khatri.</em>
+        </span>
       </h1>
       <p class="intro">{profile.introduction}</p>
       <p class="availability">
@@ -31,49 +33,11 @@ import ProjectIndex from './ProjectIndex.astro';
       </div>
     </div>
     <ProjectIndex />
-    <figure
-      class="hero-study"
-      aria-label="Architecture illustration: a question becomes context, then useful output"
-    >
-      <div class="study-caption eyebrow">
-        <span>Fig. 01 / A working idea</span>
-        <span>INPUT → OUTPUT</span>
-      </div>
-      <div class="study-body">
-        <div class="study-row">
-          <span class="eyebrow">01 / Input</span>
-          <span class="source">A good question.</span>
-        </div>
-        <div class="connector" aria-hidden="true"></div>
-        <div class="context-layer">
-          <span class="eyebrow">02 / The system</span>
-          <strong>
-            Find the
-            <br />
-            <em>right context.</em>
-          </strong>
-          <div class="context-tags">
-            <span>retrieve</span>
-            <span>connect</span>
-            <span>reason</span>
-          </div>
-        </div>
-        <div class="connector" aria-hidden="true"></div>
-        <div class="study-row">
-          <span class="eyebrow">03 / Output</span>
-          <span class="source">Something useful.</span>
-        </div>
-      </div>
-      <figcaption>
-        Different products. One recurring question:
-        <br />
-        how does information become useful?
-      </figcaption>
-    </figure>
+    <SystemArtifact />
   </div>
-  <div class="hero-bottom eyebrow">
-    <span>Built to be understood.</span>
-    <span>Scroll to explore / 01—03</span>
+  <div class="hero-route">
+    <span class="eyebrow">One question. Follow its path.</span>
+    <a href="#trace">Enter the system ↓</a>
   </div>
 </section>
 <style>
@@ -108,8 +72,9 @@ import ProjectIndex from './ProjectIndex.astro';
     margin-bottom: 28px;
     letter-spacing: -0.065em;
   }
-  h1 span {
+  h1 em {
     color: var(--accent);
+    font-style: normal;
   }
   .intro {
     color: var(--muted);
@@ -139,96 +104,10 @@ import ProjectIndex from './ProjectIndex.astro';
     padding: 22px 0;
     border-top: 1px solid var(--line);
   }
-  .hero-study {
-    grid-area: study;
-    min-width: 0;
-    animation: arrive 450ms ease-out both;
-    margin: 0;
-    border: 1px solid var(--line);
-  }
-  @keyframes arrive {
-    from {
-      opacity: 0.6;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .study-caption {
-    display: flex;
-    justify-content: space-between;
-    padding: 16px;
-    font-size: 10px;
-    border-bottom: 1px solid var(--line);
-  }
-  .study-body {
-    padding: 28px 32px;
-  }
-  .study-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-  .study-row .eyebrow {
-    font-size: 10px;
-  }
-  .source {
-    font-family: var(--display);
-    font-size: 19px;
-  }
-  .connector {
-    width: 1px;
-    height: 32px;
-    margin-left: 50%;
-    background: var(--boundary);
-  }
-  .context-layer {
-    padding: 25px;
-    border: 1px solid var(--accent);
-    background: var(--surface);
-  }
-  .context-layer strong {
-    display: block;
-    font: 500 clamp(28px, 3vw, 44px)/1.08 var(--display);
-    letter-spacing: -0.045em;
-    margin: 16px 0 24px;
-  }
-  .context-layer em {
-    color: var(--accent);
-    font-style: normal;
-  }
-  .context-tags {
-    display: flex;
-    gap: 8px;
-  }
-  .context-tags span {
-    font: 11px var(--mono);
-    padding: 5px 8px;
-    border: 1px solid var(--line);
-    color: var(--muted);
-  }
-  figcaption {
-    padding: 16px 24px;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 12px;
-  }
   @media (max-width: 1023px) {
     .hero-grid {
       gap: 32px;
       grid-template-columns: 1.2fr 1fr;
-    }
-    .study-body {
-      padding: 20px;
-    }
-    .study-caption span:last-child {
-      display: none;
-    }
-    .source {
-      font-size: 15px;
     }
   }
   @media (max-width: 767px) {
@@ -243,24 +122,14 @@ import ProjectIndex from './ProjectIndex.astro';
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'identity' 'index' 'study';
     }
-    .hero-study {
-      margin-top: 16px;
-    }
     .intro {
       font-size: 16px;
     }
     h1 {
-      font-size: clamp(44px, 11.7vw, 76px);
+      font-size: clamp(42px, 11.7vw, 76px);
     }
     .availability {
       font-size: 12px;
-    }
-    .hero-bottom {
-      margin-top: 32px;
-      font-size: 10px;
-    }
-    .context-layer strong {
-      font-size: 38px;
     }
   }
 </style>

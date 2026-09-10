@@ -15,30 +15,41 @@ const { project, title, description } = Astro.props;
 <BaseLayout title={title} description={description}>
   <SiteHeader />
   <main id="main">
-    <section class="shell case-hero">
+    <section class="shell case-hero" data-motion="case">
       <a class="back-link" href="/#work">
         ← All projects
       </a>
-      <p class="eyebrow">
-        {project.number} / {project.category}
-      </p>
-      <h1>
-        {project.name}
-        <span class="accent">.</span>
-      </h1>
-      <p class="case-lead">{project.summary}</p>
-      <div class="actions">
-        <a class="button primary" href={project.repo}>
-          Explore the repository ↗
-        </a>
-        <a class="button" href={project.url}>
-          Visit application ↗
-        </a>
+      <div class="case-opening">
+        <div class="case-intro">
+          <p class="eyebrow">
+            {project.number} / {project.category}
+          </p>
+          <h1>
+            {project.name}
+            <span class="accent">.</span>
+          </h1>
+          <p class="case-lead">{project.summary}</p>
+          <div class="actions">
+            <a class="button primary" href={project.repo}>
+              Explore the repository ↗
+            </a>
+            <a class="button" href={project.url}>
+              Visit application ↗
+            </a>
+          </div>
+          <ul class="case-metadata" aria-label="Technologies">
+            {project.stack.map((tech) => (
+              <li>{tech}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="case-artifact">
+          <ArchitectureFigure project={project} />
+        </div>
       </div>
     </section>
     <section class="paper">
       <div class="shell case-body">
-        <ArchitectureFigure project={project} />
         <div class="prose">
           <slot />
         </div>
@@ -53,15 +64,41 @@ const { project, title, description } = Astro.props;
 </BaseLayout>
 <style>
   .case-hero {
-    padding-block: 40px 80px;
+    padding-block: 32px 0;
+  }
+  .case-opening {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6%;
+    align-items: center;
+  }
+  .case-intro {
+    padding-bottom: 64px;
+    min-width: 0;
+  }
+  .case-artifact {
+    min-width: 0;
+    align-self: end;
+    border-bottom: 20px solid var(--paper);
+  }
+  .case-metadata {
+    padding: 24px 0 0;
+    margin: 24px 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font: 12px var(--mono);
+    color: var(--muted);
   }
   .back-link {
     font-size: 14px;
     display: inline-block;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
   .case-hero h1 {
-    font-size: clamp(44px, 8vw, 108px);
+    font-size: clamp(44px, 5.6vw, 80px);
     overflow-wrap: anywhere;
   }
   .case-lead {
@@ -69,11 +106,11 @@ const { project, title, description } = Astro.props;
     max-width: 40ch;
   }
   .case-body {
-    padding-block: 64px;
+    padding-block: 32px 64px;
   }
   .prose {
     max-width: 70ch;
-    margin: 72px auto;
+    margin: 32px auto 72px;
   }
   .prose :global(h2) {
     font-size: 32px;
@@ -92,9 +129,17 @@ const { project, title, description } = Astro.props;
   .case-end {
     padding-block: 32px;
   }
+  @media (max-width: 1099px) {
+    .case-opening {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .case-intro {
+      padding-bottom: 32px;
+    }
+  }
   @media (max-width: 767px) {
     .case-hero {
-      padding-block: 28px 48px;
+      padding-block: 28px 0;
     }
     .case-lead {
       font-size: 20px;

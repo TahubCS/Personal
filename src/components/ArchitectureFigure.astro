@@ -8,17 +8,83 @@ const { project } = Astro.props;
 
 <figure class:list={['architecture', project.slug]}>
   <div class="figure-top eyebrow">
-    <span>Fig. {project.number} / System overview</span>
+    <span>Fig. {project.number} / Process study</span>
     <span>Architecture illustration</span>
   </div>
-  <ol>
-    {project.flow.map((step, index) => (
+  {project.slug === 'context-compiler' ? (
+    <div class="retrieval-study">
+      <div class="source-sheets">
+        <div>
+          <span>01 / Source</span>
+          <strong>GitHub repository</strong>
+        </div>
+        <div>
+          <span>02 / Prepare</span>
+          <strong>Scan &amp; embed</strong>
+        </div>
+        <div>
+          <span>03 / Select</span>
+          <strong>Hybrid retrieval</strong>
+        </div>
+      </div>
+      <div class="assembled-sheet">
+        <span class="eyebrow">04 / Context pack</span>
+        <strong>
+          The useful
+          <br />
+          working set.
+        </strong>
+        <span>Paths + excerpts + selection metadata</span>
+        <span class="artifact-stamp">Agent context</span>
+      </div>
+    </div>
+  ) : project.slug === 'supo' ? (
+    <ol class="conversation-study">
       <li>
-        <span class="eyebrow">0{index + 1}</span>
-        <strong>{step}</strong>
+        <span class="eyebrow">01 / Customer message</span>
+        <strong>
+          A question starts
+          <br />
+          the conversation.
+        </strong>
       </li>
-    ))}
-  </ol>
+      <li>
+        <span class="eyebrow">02 / Knowledge retrieval</span>
+        <strong>Product context</strong>
+        <span>Knowledge → streamed AI response</span>
+      </li>
+      <li class="handoff-boundary">
+        <span class="eyebrow">03 / AI → human</span>
+        <strong>
+          Keep the context.
+          <br />
+          Change the responder.
+        </strong>
+        <span>Human handoff · conversation continuity</span>
+      </li>
+    </ol>
+  ) : (
+    <div class="learning-study">
+      <div class="material-stack">
+        <span class="material-page">Course materials</span>
+        <span class="material-page">Extract &amp; review</span>
+        <span class="material-page">Class retrieval</span>
+      </div>
+      <div class="resource-hub">
+        <span class="eyebrow">Shared context</span>
+        <strong>
+          Learn from
+          <br />
+          the same source.
+        </strong>
+        <ul>
+          <li>Study plans</li>
+          <li>Flashcards</li>
+          <li>Tutor context</li>
+        </ul>
+      </div>
+    </div>
+  )}
   <figcaption>
     {project.slug === 'supo'
       ? 'Conversation continuity across an AI-to-human boundary.'
@@ -27,73 +93,3 @@ const { project } = Astro.props;
         : 'Index preparation and query handling are separate paths.'}
   </figcaption>
 </figure>
-<style>
-  .architecture {
-    margin: 0;
-    border: 1px solid #97a5a4;
-    background: #e7e8df;
-    color: var(--ink);
-  }
-  .figure-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    border-bottom: 1px solid #a9b4ad;
-    padding: 16px 24px;
-    font-size: 10px;
-    color: #46575a;
-  }
-  .architecture ol {
-    list-style: none;
-    margin: 0;
-    padding: 32px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px 40px;
-  }
-  .architecture li {
-    position: relative;
-    border-top: 1px solid #788985;
-    padding: 16px 0 22px;
-  }
-  .architecture strong {
-    display: block;
-    font: 500 28px/1.15 var(--display);
-    letter-spacing: -0.035em;
-    margin-top: 12px;
-  }
-  .architecture .eyebrow {
-    color: #46575a;
-  }
-  .flow-arrow {
-    position: absolute;
-    right: 0;
-    top: 10px;
-    color: #46575a;
-  }
-  figcaption {
-    font-size: 12px;
-    border-top: 1px solid #a9b4ad;
-    padding: 16px 24px;
-    color: #46575a;
-  }
-  .supo {
-    background: #dce5e4;
-  }
-  .crowsnest {
-    background: #e8e1d2;
-  }
-  @media (max-width: 767px) {
-    .figure-top {
-      padding: 16px;
-      flex-direction: column;
-    }
-    .architecture ol {
-      padding: 24px;
-      gap: 16px;
-    }
-    .architecture strong {
-      font-size: 22px;
-    }
-  }
-</style>
