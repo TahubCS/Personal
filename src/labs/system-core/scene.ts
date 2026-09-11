@@ -68,7 +68,8 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
   const objectSize = new Vector3();
   const objectCenter = new Vector3();
   scene.add(root);
-  scene.add(new HemisphereLight('#d3dce1', '#171c1d', 0.35));
+  const fill = new HemisphereLight('#d3dce1', '#171c1d', 0.35);
+  scene.add(fill);
   const key = new DirectionalLight('#f3e4d1', 3.2);
   key.position.set(-3, 5, 5);
   key.castShadow = true;
@@ -101,8 +102,9 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     const progress = reduced.matches
       ? 1
       : normalizedProgress(-bounds.top / Math.max(1, bounds.height - height));
-    const pose = corePose(progress);
     const mobile = width < 701;
+    const pose = corePose(progress, mobile ? 'narrow' : 'wide');
+    fill.intensity = 0.35 + pose.exposure * 0.2;
     root.rotation.set(...pose.rotation);
     root.position.set(0, 0, 0);
     root.scale.setScalar(pose.scale);

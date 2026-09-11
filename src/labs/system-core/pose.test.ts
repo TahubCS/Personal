@@ -28,3 +28,21 @@ test('interrupted and reverse journeys return exactly the same pose', () => {
   assert.deepEqual(corePose(0.5), middle);
   assert.ok(corePose(0.5).separation.some((value) => Math.abs(value) > 0.5));
 });
+
+test('the assembled pose is shared across layouts and remains unlit by the reveal fill', () => {
+  assert.deepEqual(corePose(0), corePose(0, 'narrow'));
+  assert.deepEqual(corePose(0).rotation, [0.08, -0.12, -0.06]);
+  assert.deepEqual(
+    corePose(0).separation.map((value) => value || 0),
+    [0, 0, 0, 0, 0],
+  );
+  assert.equal(corePose(0).exposure, 0);
+});
+
+test('the opened pose holds still before the unchanged paper transition', () => {
+  for (const layout of ['wide', 'narrow'] as const) {
+    assert.deepEqual(corePose(0.52, layout), corePose(0.6, layout));
+    assert.equal(corePose(0.61, layout).paper, 0);
+    assert.equal(corePose(0.91, layout).paper, 1);
+  }
+});

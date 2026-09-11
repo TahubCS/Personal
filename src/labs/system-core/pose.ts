@@ -3,6 +3,7 @@ export interface CorePose {
   readonly separation: readonly number[];
   readonly paper: number;
   readonly scale: number;
+  readonly exposure: number;
 }
 
 export function normalizedProgress(value: number): number {
@@ -15,25 +16,30 @@ function easeBetween(progress: number, start: number, end: number): number {
 }
 
 /** Every pose is a pure function of position, including reverse and fast scroll. */
-export function corePose(progress: number): CorePose {
+export function corePose(
+  progress: number,
+  layout: 'wide' | 'narrow' = 'wide',
+): CorePose {
   const p = normalizedProgress(progress);
-  const turn = easeBetween(p, 0.02, 0.42);
+  const turn = easeBetween(p, 0.02, 0.22);
   const settle = easeBetween(p, 0.62, 1);
   return {
     rotation: [
-      0.08 + turn * 0.5,
-      -0.12 - turn * 0.72,
-      -0.06 - turn * 0.22 + settle * 0.1,
+      0.08 + turn * (layout === 'narrow' ? 0.87 : 0.37),
+      -0.12 - turn * (layout === 'narrow' ? 0.63 : 0.83),
+      -0.06 + turn * (layout === 'narrow' ? 0.14 : -0.16) + settle * 0.1,
     ],
     separation: [
-      -1.5 * easeBetween(p, 0.3, 0.7),
-      -0.65 * easeBetween(p, 0.35, 0.75),
+      // Cover first, ceramic frame second, then the rear enclosure and routing.
+      // All components settle by 52%; the paper boundary starts at 61%.
+      -4.2 * easeBetween(p, 0.3, 0.5),
+      -1.6 * easeBetween(p, 0.34, 0.52),
       0,
-      1.1 * easeBetween(p, 0.28, 0.68),
-      2.4 * easeBetween(p, 0.24, 0.64),
+      2.25 * easeBetween(p, 0.27, 0.43),
+      5.5 * easeBetween(p, 0.18, 0.35),
     ],
     paper: easeBetween(p, 0.61, 0.91),
-    scale:
-      1 + 0.08 * easeBetween(p, 0, 0.25) - 0.19 * easeBetween(p, 0.3, 0.78),
+    exposure: easeBetween(p, 0.22, 0.48),
+    scale: 1 + 0.08 * easeBetween(p, 0, 0.2) - 0.19 * easeBetween(p, 0.2, 0.52),
   };
 }
