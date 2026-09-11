@@ -9,6 +9,10 @@ export default defineConfig({
         'astro:config:setup': ({ command, injectRoute }) => {
           if (command === 'dev') {
             injectRoute({
+              pattern: '/handoff-review',
+              entrypoint: './src/labs/handoff-review/HandoffReview.astro',
+            });
+            injectRoute({
               pattern: '/motion-lab',
               entrypoint: './src/labs/system-core/MotionLab.astro',
             });
