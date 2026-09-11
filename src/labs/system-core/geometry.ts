@@ -12,6 +12,7 @@ import {
   type BufferGeometry,
   type MeshStandardMaterial,
 } from 'three';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { CoreMaterials } from './materials';
 
 function contour(width: number, height: number, chamfer: number): Shape {
@@ -56,6 +57,9 @@ function casing(
     curveSegments: 1,
   });
   geometry.translate(0, 0, -depth / 2);
+  // Extrusions are non-indexed: smooth the bevel normals in place while
+  // retaining hard edges above 30 degrees and the exact original silhouette.
+  toCreasedNormals(geometry, Math.PI / 6);
   return geometry;
 }
 
@@ -81,6 +85,13 @@ export function buildCore(materials: CoreMaterials) {
   ) {
     const mesh = new Mesh(geometry, material);
     mesh.position.set(...position);
+    mesh.receiveShadow = true;
+    // Only the enclosure, inner frame and central body cast shadows. Fine ribs
+    // receive their shade without multiplying the shadow pass's draw calls.
+    mesh.castShadow =
+      material === materials.graphite ||
+      (material === materials.ceramic && geometry instanceof ExtrudeGeometry) ||
+      (group === lattice && material === materials.interior);
     const edges = new LineSegments(
       new EdgesGeometry(geometry, 28),
       materials.edge,
@@ -100,7 +111,7 @@ export function buildCore(materials: CoreMaterials) {
       -0.12,
     ]);
     for (let i = 0; i < 13; i++) {
-      part(back, new BoxGeometry(0.26, 0.055, 0.78), materials.ceramic, [
+      part(back, new BoxGeometry(0.26, 0.055, 0.78), materials.structure, [
         x,
         -1.23 + i * 0.205,
         -0.2,
@@ -131,16 +142,16 @@ export function buildCore(materials: CoreMaterials) {
   part(
     routing,
     new BoxGeometry(2.7, 0.12, 0.19),
-    materials.ceramic,
+    materials.structure,
     [0, -0.6, -0.4],
   );
 
   // The center is an open three-dimensional truss, rather than a solid card.
-  const strutGeometry = new CylinderGeometry(0.025, 0.025, 1, 5);
+  const strutGeometry = new CylinderGeometry(0.014, 0.014, 1, 5);
   const up = new Vector3(0, 1, 0);
   function strut(start: Vector3, end: Vector3) {
     const direction = end.clone().sub(start);
-    const mesh = part(lattice, strutGeometry, materials.ceramic, [0, 0, 0]);
+    const mesh = part(lattice, strutGeometry, materials.structure, [0, 0, 0]);
     mesh.position.copy(start).add(end).multiplyScalar(0.5);
     mesh.quaternion.setFromUnitVectors(up, direction.clone().normalize());
     mesh.scale.y = direction.length();
@@ -149,26 +160,25 @@ export function buildCore(materials: CoreMaterials) {
     for (let col = 0; col < 4; col++) {
       const x = (col - 1.5) * 0.47;
       const y = (row - 2) * 0.47;
-      const a = new Vector3(x - 0.2, y - 0.2, -0.1);
-      const b = new Vector3(x + 0.2, y + 0.2, 0.43);
+      const a = new Vector3(x - 0.2, y - 0.2, -0.27);
+      const b = new Vector3(x + 0.2, y + 0.2, 0.16);
       strut(a, b);
       strut(
-        new Vector3(x + 0.2, y - 0.2, -0.1),
-        new Vector3(x - 0.2, y + 0.2, 0.43),
+        new Vector3(x + 0.2, y - 0.2, -0.27),
+        new Vector3(x - 0.2, y + 0.2, 0.16),
       );
-      strut(new Vector3(x, y - 0.22, 0.43), new Vector3(x, y + 0.22, 0.43));
     }
   }
   part(
     lattice,
-    casing(1.15, 1.5, 0.34),
+    casing(1.3, 1.65, 0.34),
     materials.interior,
     [0.18, 0.05, 0.23],
   );
   for (let i = 0; i < 7; i++) {
     part(
       lattice,
-      new BoxGeometry(0.065, 0.66 + (i % 3) * 0.1, 0.06),
+      new BoxGeometry(0.08, 0.84 + (i % 3) * 0.1, 0.06),
       materials.signal,
       [-0.19 + i * 0.12, 0.05, 0.45],
     );
@@ -186,10 +196,17 @@ export function buildCore(materials: CoreMaterials) {
       post.rotation.x = Math.PI / 2;
     }
   }
-  part(face, casing(3.6, 4, 0.32, 0.85), materials.graphite, [0, 0, 0.94]);
-  part(face, casing(2.83, 3.23, 0.045, 0.09), materials.signal, [0, 0, 1.08]);
+  // The deeper, smaller opening masks the frame and routing when assembled.
+  // Its front surface stays at the original depth, preserving camera framing.
+  part(face, casing(3.6, 4, 0.5, 1.35), materials.graphite, [0, 0, 0.85]);
+  part(
+    face,
+    casing(2.27, 2.67, 0.045, 0.09),
+    materials.perimeter,
+    [0, 0, 1.08],
+  );
   for (let i = 0; i < 9; i++) {
-    part(face, new BoxGeometry(0.32, 0.027, 0.035), materials.ceramic, [
+    part(face, new BoxGeometry(0.32, 0.027, 0.035), materials.structure, [
       -1.55,
       -0.9 + i * 0.17,
       1.115,

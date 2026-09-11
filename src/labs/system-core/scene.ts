@@ -1,5 +1,4 @@
 import {
-  AmbientLight,
   DirectionalLight,
   HemisphereLight,
   Mesh,
@@ -10,6 +9,7 @@ import {
   Box3,
   Vector3,
   PMREMGenerator,
+  PCFSoftShadowMap,
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { buildCore } from './geometry';
@@ -48,13 +48,15 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     return () => {};
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = PCFSoftShadowMap;
   host.append(renderer.domElement);
   const scene = new Scene();
   const room = new RoomEnvironment();
   const environmentGenerator = new PMREMGenerator(renderer);
   const environment = environmentGenerator.fromScene(room, 0.06);
   scene.environment = environment.texture;
-  scene.environmentIntensity = 0.65;
+  scene.environmentIntensity = 0.3;
   room.dispose();
   environmentGenerator.dispose();
   const camera = new OrthographicCamera(-5, 5, 3.4, -3.4, 0.1, 100);
@@ -66,13 +68,22 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
   const objectSize = new Vector3();
   const objectCenter = new Vector3();
   scene.add(root);
-  scene.add(new AmbientLight('#e8ece8', 0.6));
-  scene.add(new HemisphereLight('#dfeaf3', '#443624', 1.1));
-  const key = new DirectionalLight('#ffdfb2', 2.8);
-  key.position.set(-3, 6, 5);
+  scene.add(new HemisphereLight('#d3dce1', '#171c1d', 0.35));
+  const key = new DirectionalLight('#f3e4d1', 3.2);
+  key.position.set(-3, 5, 5);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.left = -7;
+  key.shadow.camera.right = 7;
+  key.shadow.camera.top = 7;
+  key.shadow.camera.bottom = -7;
+  key.shadow.camera.near = 0.5;
+  key.shadow.camera.far = 25;
+  key.shadow.normalBias = 0.025;
+  key.shadow.bias = -0.0002;
   scene.add(key);
-  const rim = new DirectionalLight('#b5d5ea', 2);
-  rim.position.set(4, -1, 1);
+  const rim = new DirectionalLight('#b5ccdc', 1.1);
+  rim.position.set(4, 1, -2);
   scene.add(rim);
 
   let frame = 0;
@@ -118,6 +129,10 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
       0,
     );
     uniforms.paper.value = pose.paper;
+    // Solid scenes need lighting, not transparent line draw calls. Once the
+    // drawing covers the viewport, its flat surfaces no longer need shadow updates.
+    materials.edge.visible = pose.paper > 0;
+    renderer.shadowMap.autoUpdate = pose.paper < 1;
     stage.style.setProperty('--paper-progress', String(pose.paper));
     stage.style.setProperty('--scroll-progress', String(progress));
     stage.style.setProperty(
@@ -223,6 +238,7 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     });
     for (const material of Object.values(materials)) material.dispose();
     environment.dispose();
+    key.shadow.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     delete stage.dataset.ready;

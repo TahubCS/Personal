@@ -29,44 +29,74 @@ function applyDrawingCut(
 
 export function coreMaterials(uniforms: DrawingUniforms) {
   const graphite = new MeshStandardMaterial({
-    color: '#334044',
-    roughness: 0.34,
-    metalness: 0.72,
+    color: '#293238',
+    roughness: 0.38,
+    metalness: 0.6,
   });
   const ceramic = new MeshStandardMaterial({
-    color: '#c0c9c5',
-    roughness: 0.32,
-    metalness: 0.3,
+    color: '#777f7a',
+    roughness: 0.62,
+    metalness: 0.05,
   });
   const copper = new MeshStandardMaterial({
-    color: '#dfb578',
-    roughness: 0.28,
-    metalness: 0.65,
+    color: '#bd824b',
+    roughness: 0.3,
+    metalness: 0.85,
   });
   const interior = new MeshStandardMaterial({
-    color: '#14242a',
-    roughness: 0.5,
-    metalness: 0.45,
+    color: '#111b20',
+    roughness: 0.66,
+    metalness: 0.2,
+  });
+  const structure = new MeshStandardMaterial({
+    color: '#455553',
+    roughness: 0.65,
+    metalness: 0.25,
+    envMapIntensity: 0.3,
+  });
+  const perimeter = new MeshStandardMaterial({
+    color: '#806140',
+    roughness: 0.48,
+    metalness: 0.75,
   });
   const signal = new MeshStandardMaterial({
-    color: '#e4b46b',
-    emissive: new Color('#e4b46b'),
-    emissiveIntensity: 0.3,
-    roughness: 0.4,
+    color: '#e4a24b',
+    emissive: new Color('#d78b2b'),
+    emissiveIntensity: 0.55,
+    roughness: 0.45,
+    metalness: 0.15,
   });
   const edge = new LineBasicMaterial({
     color: '#70817e',
     transparent: true,
-    opacity: 0.56,
+    // Surface lighting defines the solid object; outlines belong to the drawing.
+    opacity: 0,
   });
-  for (const material of [graphite, ceramic, copper, interior, signal]) {
+  for (const material of [
+    graphite,
+    ceramic,
+    copper,
+    interior,
+    structure,
+    perimeter,
+    signal,
+  ]) {
     material.polygonOffset = true;
     material.polygonOffsetFactor = 1;
     material.polygonOffsetUnits = 1;
     applyDrawingCut(material, uniforms, false);
   }
   applyDrawingCut(edge, uniforms, true);
-  return { graphite, ceramic, copper, interior, signal, edge };
+  return {
+    graphite,
+    ceramic,
+    copper,
+    interior,
+    structure,
+    perimeter,
+    signal,
+    edge,
+  };
 }
 
 export type CoreMaterials = ReturnType<typeof coreMaterials>;
