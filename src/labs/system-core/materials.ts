@@ -52,9 +52,17 @@ function applyDrawingCut(
        float sinA = sin(uAngle);
        float span = cosA + sinA;
        float proj = (uv.x * cosA + uv.y * sinA) / span;
-       float onPaper = step(proj, uPaper);
+       float pixelSize = max(fwidth(proj), 0.00005);
+       float onPaper = 1.0 - smoothstep(uPaper - pixelSize * 0.75, uPaper + pixelSize * 0.75, proj);
        gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${isInk ? inkColor : '0.949, 0.937, 0.906'}), onPaper);
-       gl_FragColor.a = mix(gl_FragColor.a, ${targetAlpha}, onPaper);`,
+       gl_FragColor.a = mix(gl_FragColor.a, ${targetAlpha}, onPaper);
+       if (uPaper > 0.005 && uPaper < 0.995) {
+         float distToEdge = abs(proj - uPaper) / pixelSize;
+         float edgeStroke = 1.0 - smoothstep(0.0, 1.2, distToEdge);
+         vec3 leadColor = vec3(0.72, 0.45, 0.16);
+         gl_FragColor.rgb = mix(gl_FragColor.rgb, leadColor, edgeStroke * 0.85);
+         gl_FragColor.a = max(gl_FragColor.a, edgeStroke);
+       }`,
     );
   };
   material.customProgramCacheKey = () => programKey;
