@@ -19,7 +19,13 @@ import './motion-lab.css';
     <main>
       <section class="lab-runway" aria-labelledby="lab-title">
         <div class="lab-stage">
-          <div class="lab-paper" aria-hidden="true"></div>
+          <div class="lab-paper" aria-hidden="true">
+            <div class="lab-paper-border"></div>
+            <span class="lab-datum lab-datum--tl">+</span>
+            <span class="lab-datum lab-datum--tr">+</span>
+            <span class="lab-datum lab-datum--bl">+</span>
+            <span class="lab-datum lab-datum--br">+</span>
+          </div>
           <header class="lab-header">
             <a href="/">
               MTK <span>/ Motion lab</span>
@@ -65,9 +71,38 @@ import './motion-lab.css';
             </figcaption>
           </figure>
           <div class="lab-dimensions" aria-hidden="true">
-            <span>01 / Envelope</span>
-            <span>02 / Open structure</span>
-            <span>03 / Assembly axis</span>
+            <div class="lab-callout lab-callout--shroud">
+              <svg class="lab-callout__leader" width="80" height="50" viewBox="0 0 80 50" fill="none">
+                <circle cx="70" cy="12" r="2.5" class="lab-callout__dot" />
+                <polyline points="70,12 40,42 0,42" class="lab-callout__line" />
+              </svg>
+              <span class="lab-callout__label">01 / Front shroud</span>
+            </div>
+            <div class="lab-callout lab-callout--frame">
+              <svg class="lab-callout__leader" width="80" height="50" viewBox="0 0 80 50" fill="none">
+                <circle cx="70" cy="12" r="2.5" class="lab-callout__dot" />
+                <polyline points="70,12 40,42 0,42" class="lab-callout__line" />
+              </svg>
+              <span class="lab-callout__label">02 / Ceramic frame</span>
+            </div>
+            <div class="lab-callout lab-callout--core">
+              <svg class="lab-callout__leader" width="80" height="120" viewBox="0 0 80 120" fill="none">
+                <circle cx="70" cy="110" r="2.5" class="lab-callout__dot lab-callout__dot--amber" />
+                <polyline points="70,110 35,10 0,10" class="lab-callout__line" />
+              </svg>
+              <span class="lab-callout__label">03 / Amber core</span>
+            </div>
+            <div class="lab-callout lab-callout--conductor">
+              <svg class="lab-callout__leader" width="140" height="50" viewBox="0 0 140 50" fill="none">
+                <circle cx="10" cy="38" r="2.5" class="lab-callout__dot" />
+                <polyline points="10,38 40,8 140,8" class="lab-callout__line" />
+              </svg>
+              <span class="lab-callout__label">04 / Conductor array</span>
+            </div>
+            <div class="lab-datum-block">
+              <span class="lab-datum-block__title">DRAWING REF · SC—001</span>
+              <span class="lab-datum-block__spec">SCALE 1:1 · ISO 128-30 · 16MM GRID</span>
+            </div>
           </div>
           <footer class="lab-caption">
             <p class="lab-phase">Construction study</p>
