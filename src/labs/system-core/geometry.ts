@@ -9,7 +9,7 @@ import {
   Path,
   Shape,
   Vector3,
-  type BufferGeometry,
+  BufferGeometry,
   type MeshStandardMaterial,
 } from 'three';
 import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -63,6 +63,29 @@ function casing(
   return geometry;
 }
 
+function columnEdges(w: number, h: number, d: number): BufferGeometry {
+  const hw = w / 2;
+  const hh = h / 2;
+  const hd = d / 2;
+  return new BufferGeometry().setFromPoints([
+    new Vector3(-hw, -hh, -hd),
+    new Vector3(-hw, hh, -hd),
+    new Vector3(hw, -hh, -hd),
+    new Vector3(hw, hh, -hd),
+    new Vector3(hw, -hh, hd),
+    new Vector3(hw, hh, hd),
+    new Vector3(-hw, -hh, hd),
+    new Vector3(-hw, hh, hd),
+  ]);
+}
+
+function lineSegmentEdge(): BufferGeometry {
+  return new BufferGeometry().setFromPoints([
+    new Vector3(0, -0.5, 0),
+    new Vector3(0, 0.5, 0),
+  ]);
+}
+
 export function buildCore(materials: CoreMaterials) {
   const root = new Group();
   const layers = [
@@ -82,6 +105,7 @@ export function buildCore(materials: CoreMaterials) {
     geometry: BufferGeometry,
     material: MeshStandardMaterial,
     position: readonly [number, number, number],
+    customEdges?: BufferGeometry,
   ) {
     const mesh = new Mesh(geometry, material);
     mesh.position.set(...position);
@@ -93,7 +117,7 @@ export function buildCore(materials: CoreMaterials) {
       (material === materials.ceramic && geometry instanceof ExtrudeGeometry) ||
       (group === lattice && material === materials.interior);
     const edges = new LineSegments(
-      new EdgesGeometry(geometry, 28),
+      customEdges ?? new EdgesGeometry(geometry, 28),
       materials.edge,
     );
     mesh.add(edges);
@@ -123,11 +147,13 @@ export function buildCore(materials: CoreMaterials) {
   for (let i = 0; i < 11; i++) {
     const x = (i - 5) * 0.235;
     const length = 1.7 + (i % 3) * 0.31;
-    part(routing, new BoxGeometry(0.045, length, 0.07), materials.copper, [
-      x,
-      -0.15,
-      -0.35,
-    ]);
+    part(
+      routing,
+      new BoxGeometry(0.045, length, 0.07),
+      materials.copper,
+      [x, -0.15, -0.35],
+      columnEdges(0.045, length, 0.07),
+    );
     part(routing, new BoxGeometry(0.18, 0.19, 0.14), materials.copper, [
       x,
       length / 2 - 0.15,
@@ -151,7 +177,13 @@ export function buildCore(materials: CoreMaterials) {
   const up = new Vector3(0, 1, 0);
   function strut(start: Vector3, end: Vector3) {
     const direction = end.clone().sub(start);
-    const mesh = part(lattice, strutGeometry, materials.structure, [0, 0, 0]);
+    const mesh = part(
+      lattice,
+      strutGeometry,
+      materials.structure,
+      [0, 0, 0],
+      lineSegmentEdge(),
+    );
     mesh.position.copy(start).add(end).multiplyScalar(0.5);
     mesh.quaternion.setFromUnitVectors(up, direction.clone().normalize());
     mesh.scale.y = direction.length();
