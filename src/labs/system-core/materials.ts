@@ -5,12 +5,34 @@ export interface DrawingUniforms {
   readonly height: { value: number };
 }
 
+interface DrawingCutOptions {
+  readonly inkColor?: string;
+  readonly targetAlpha?: number;
+  readonly key?: string;
+}
+
 /** One screen-space boundary changes the actual surfaces, not a second pose. */
 function applyDrawingCut(
   material: MeshStandardMaterial | LineBasicMaterial,
   uniforms: DrawingUniforms,
-  ink: boolean,
+  options: DrawingCutOptions | boolean,
 ): void {
+  const isInk = typeof options === 'boolean' ? options : true;
+  const inkColor =
+    typeof options === 'object' && options.inkColor
+      ? options.inkColor
+      : '0.22, 0.27, 0.28';
+  const targetAlpha =
+    typeof options === 'object' && options.targetAlpha !== undefined
+      ? options.targetAlpha.toFixed(2)
+      : '1.0';
+  const programKey =
+    typeof options === 'object' && options.key
+      ? options.key
+      : isInk
+        ? 'core-drawing-edge'
+        : 'core-drawing-surface';
+
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uPaper = uniforms.paper;
     shader.uniforms.uHeight = uniforms.height;
@@ -19,12 +41,11 @@ function applyDrawingCut(
       '#include <dithering_fragment>',
       `#include <dithering_fragment>
        float onPaper = step(gl_FragCoord.y, uHeight * uPaper);
-       gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${ink ? '0.22, 0.27, 0.28' : '0.949, 0.937, 0.906'}), onPaper);
-       gl_FragColor.a = mix(gl_FragColor.a, 1.0, onPaper);`,
+       gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${isInk ? inkColor : '0.949, 0.937, 0.906'}), onPaper);
+       gl_FragColor.a = mix(gl_FragColor.a, ${targetAlpha}, onPaper);`,
     );
   };
-  material.customProgramCacheKey = () =>
-    ink ? 'core-drawing-edge' : 'core-drawing-surface';
+  material.customProgramCacheKey = () => programKey;
 }
 
 export function coreMaterials(uniforms: DrawingUniforms) {
@@ -66,12 +87,29 @@ export function coreMaterials(uniforms: DrawingUniforms) {
     roughness: 0.45,
     metalness: 0.15,
   });
-  const edge = new LineBasicMaterial({
-    color: '#70817e',
+
+  // Four-tier technical drafting ink hierarchy
+  const edgePrimary = new LineBasicMaterial({
+    color: '#1a2226',
     transparent: true,
-    // Surface lighting defines the solid object; outlines belong to the drawing.
     opacity: 0,
   });
+  const edgeSecondary = new LineBasicMaterial({
+    color: '#425255',
+    transparent: true,
+    opacity: 0,
+  });
+  const edgeSubdued = new LineBasicMaterial({
+    color: '#6f8285',
+    transparent: true,
+    opacity: 0,
+  });
+  const edgeSignal = new LineBasicMaterial({
+    color: '#b87428',
+    transparent: true,
+    opacity: 0,
+  });
+
   for (const material of [
     graphite,
     ceramic,
@@ -86,7 +124,28 @@ export function coreMaterials(uniforms: DrawingUniforms) {
     material.polygonOffsetUnits = 1;
     applyDrawingCut(material, uniforms, false);
   }
-  applyDrawingCut(edge, uniforms, true);
+
+  applyDrawingCut(edgePrimary, uniforms, {
+    inkColor: '0.10, 0.13, 0.15',
+    targetAlpha: 1.0,
+    key: 'core-drawing-edge-primary',
+  });
+  applyDrawingCut(edgeSecondary, uniforms, {
+    inkColor: '0.20, 0.26, 0.28',
+    targetAlpha: 0.95,
+    key: 'core-drawing-edge-secondary',
+  });
+  applyDrawingCut(edgeSubdued, uniforms, {
+    inkColor: '0.28, 0.35, 0.37',
+    targetAlpha: 0.92,
+    key: 'core-drawing-edge-subdued',
+  });
+  applyDrawingCut(edgeSignal, uniforms, {
+    inkColor: '0.72, 0.45, 0.16',
+    targetAlpha: 1.0,
+    key: 'core-drawing-edge-signal',
+  });
+
   return {
     graphite,
     ceramic,
@@ -95,7 +154,11 @@ export function coreMaterials(uniforms: DrawingUniforms) {
     structure,
     perimeter,
     signal,
-    edge,
+    edgePrimary,
+    edgeSecondary,
+    edgeSubdued,
+    edgeSignal,
+    edge: edgePrimary,
   };
 }
 

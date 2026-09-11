@@ -11,6 +11,7 @@ import {
   Vector3,
   BufferGeometry,
   type MeshStandardMaterial,
+  LineBasicMaterial,
 } from 'three';
 import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { CoreMaterials } from './materials';
@@ -79,13 +80,6 @@ function columnEdges(w: number, h: number, d: number): BufferGeometry {
   ]);
 }
 
-function lineSegmentEdge(): BufferGeometry {
-  return new BufferGeometry().setFromPoints([
-    new Vector3(0, -0.5, 0),
-    new Vector3(0, 0.5, 0),
-  ]);
-}
-
 export function buildCore(materials: CoreMaterials) {
   const root = new Group();
   const layers = [
@@ -106,6 +100,7 @@ export function buildCore(materials: CoreMaterials) {
     material: MeshStandardMaterial,
     position: readonly [number, number, number],
     customEdges?: BufferGeometry,
+    edgeMaterial?: LineBasicMaterial,
   ) {
     const mesh = new Mesh(geometry, material);
     mesh.position.set(...position);
@@ -118,7 +113,7 @@ export function buildCore(materials: CoreMaterials) {
       (group === lattice && material === materials.interior);
     const edges = new LineSegments(
       customEdges ?? new EdgesGeometry(geometry, 28),
-      materials.edge,
+      edgeMaterial ?? materials.edgePrimary,
     );
     mesh.add(edges);
     group.add(mesh);
@@ -126,20 +121,40 @@ export function buildCore(materials: CoreMaterials) {
   }
 
   // A thick hollow chassis, with a stepped inner back wall and integral side rails.
-  part(back, casing(3.6, 4, 0.32), materials.graphite, [0, 0, -0.82]);
-  part(back, casing(3.12, 3.52, 0.12), materials.interior, [0, 0, -0.6]);
+  part(
+    back,
+    casing(3.6, 4, 0.32),
+    materials.graphite,
+    [0, 0, -0.82],
+    undefined,
+    materials.edgePrimary,
+  );
+  part(
+    back,
+    casing(3.12, 3.52, 0.12),
+    materials.interior,
+    [0, 0, -0.6],
+    undefined,
+    materials.edgeSecondary,
+  );
   for (const x of [-1.52, 1.52]) {
-    part(back, new BoxGeometry(0.2, 2.9, 1.12), materials.graphite, [
-      x,
-      0,
-      -0.12,
-    ]);
+    part(
+      back,
+      new BoxGeometry(0.2, 2.9, 1.12),
+      materials.graphite,
+      [x, 0, -0.12],
+      undefined,
+      materials.edgeSecondary,
+    );
     for (let i = 0; i < 13; i++) {
-      part(back, new BoxGeometry(0.26, 0.055, 0.78), materials.structure, [
-        x,
-        -1.23 + i * 0.205,
-        -0.2,
-      ]);
+      part(
+        back,
+        new BoxGeometry(0.26, 0.055, 0.78),
+        materials.structure,
+        [x, -1.23 + i * 0.205, -0.2],
+        undefined,
+        materials.edgeSubdued,
+      );
     }
   }
 
@@ -153,27 +168,37 @@ export function buildCore(materials: CoreMaterials) {
       materials.copper,
       [x, -0.15, -0.35],
       columnEdges(0.045, length, 0.07),
+      materials.edgeSubdued,
     );
-    part(routing, new BoxGeometry(0.18, 0.19, 0.14), materials.copper, [
-      x,
-      length / 2 - 0.15,
-      -0.32,
-    ]);
-    part(routing, new BoxGeometry(0.19, 0.34, 0.15), materials.interior, [
-      x,
-      -length / 2 - 0.12,
-      -0.31,
-    ]);
+    part(
+      routing,
+      new BoxGeometry(0.18, 0.19, 0.14),
+      materials.copper,
+      [x, length / 2 - 0.15, -0.32],
+      undefined,
+      materials.edgeSubdued,
+    );
+    part(
+      routing,
+      new BoxGeometry(0.19, 0.34, 0.15),
+      materials.interior,
+      [x, -length / 2 - 0.12, -0.31],
+      undefined,
+      materials.edgeSubdued,
+    );
   }
   part(
     routing,
     new BoxGeometry(2.7, 0.12, 0.19),
     materials.structure,
     [0, -0.6, -0.4],
+    undefined,
+    materials.edgeSecondary,
   );
 
   // The center is an open three-dimensional truss, rather than a solid card.
-  const strutGeometry = new CylinderGeometry(0.014, 0.014, 1, 5);
+  const strutGeometry = new BoxGeometry(0.024, 1, 0.024);
+  const strutEdgeGeometry = columnEdges(0.024, 1, 0.024);
   const up = new Vector3(0, 1, 0);
   function strut(start: Vector3, end: Vector3) {
     const direction = end.clone().sub(start);
@@ -182,7 +207,8 @@ export function buildCore(materials: CoreMaterials) {
       strutGeometry,
       materials.structure,
       [0, 0, 0],
-      lineSegmentEdge(),
+      strutEdgeGeometry,
+      materials.edgeSecondary,
     );
     mesh.position.copy(start).add(end).multiplyScalar(0.5);
     mesh.quaternion.setFromUnitVectors(up, direction.clone().normalize());
@@ -206,6 +232,8 @@ export function buildCore(materials: CoreMaterials) {
     casing(1.3, 1.65, 0.34),
     materials.interior,
     [0.18, 0.05, 0.23],
+    undefined,
+    materials.edgeSecondary,
   );
   for (let i = 0; i < 7; i++) {
     part(
@@ -213,10 +241,19 @@ export function buildCore(materials: CoreMaterials) {
       new BoxGeometry(0.08, 0.84 + (i % 3) * 0.1, 0.06),
       materials.signal,
       [-0.19 + i * 0.12, 0.05, 0.45],
+      undefined,
+      materials.edgeSignal,
     );
   }
 
-  part(frame, casing(2.95, 3.36, 0.25, 0.35), materials.ceramic, [0, 0, 0.58]);
+  part(
+    frame,
+    casing(2.95, 3.36, 0.25, 0.35),
+    materials.ceramic,
+    [0, 0, 0.58],
+    undefined,
+    materials.edgePrimary,
+  );
   for (const x of [-1.14, 1.14]) {
     for (const y of [-1.3, 1.3]) {
       const post = part(
@@ -224,25 +261,39 @@ export function buildCore(materials: CoreMaterials) {
         new CylinderGeometry(0.09, 0.09, 0.52, 8),
         materials.copper,
         [x, y, 0.35],
+        undefined,
+        materials.edgeSecondary,
       );
       post.rotation.x = Math.PI / 2;
     }
   }
   // The deeper, smaller opening masks the frame and routing when assembled.
   // Its front surface stays at the original depth, preserving camera framing.
-  part(face, casing(3.6, 4, 0.5, 1.35), materials.graphite, [0, 0, 0.85]);
+  part(
+    face,
+    casing(3.6, 4, 0.5, 1.35),
+    materials.graphite,
+    [0, 0, 0.85],
+    undefined,
+    materials.edgePrimary,
+  );
   part(
     face,
     casing(2.27, 2.67, 0.045, 0.09),
     materials.perimeter,
     [0, 0, 1.08],
+    undefined,
+    materials.edgeSignal,
   );
   for (let i = 0; i < 9; i++) {
-    part(face, new BoxGeometry(0.32, 0.027, 0.035), materials.structure, [
-      -1.55,
-      -0.9 + i * 0.17,
-      1.115,
-    ]);
+    part(
+      face,
+      new BoxGeometry(0.32, 0.027, 0.035),
+      materials.structure,
+      [-1.55, -0.9 + i * 0.17, 1.115],
+      undefined,
+      materials.edgeSubdued,
+    );
   }
   return { root, layers };
 }

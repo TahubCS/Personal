@@ -131,9 +131,11 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
       0,
     );
     uniforms.paper.value = pose.paper;
-    // Solid scenes need lighting, not transparent line draw calls. Once the
-    // drawing covers the viewport, its flat surfaces no longer need shadow updates.
-    materials.edge.visible = pose.paper > 0;
+    const paperActive = pose.paper > 0;
+    materials.edgePrimary.visible = paperActive;
+    materials.edgeSecondary.visible = paperActive;
+    materials.edgeSubdued.visible = paperActive;
+    materials.edgeSignal.visible = paperActive;
     renderer.shadowMap.autoUpdate = pose.paper < 1;
     stage.style.setProperty('--paper-progress', String(pose.paper));
     stage.style.setProperty('--scroll-progress', String(progress));
