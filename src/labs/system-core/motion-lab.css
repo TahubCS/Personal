@@ -1,0 +1,298 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  background: var(--bg);
+}
+body {
+  margin: 0;
+  font-family: var(--body);
+  color: var(--text);
+}
+a {
+  color: inherit;
+  text-underline-offset: 5px;
+}
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+.lab-skip {
+  position: fixed;
+  z-index: 10;
+  top: 12px;
+  left: 20px;
+  padding: 14px;
+  background: var(--bg);
+  transform: translateY(-200%);
+}
+.lab-skip:focus {
+  transform: none;
+}
+.lab-runway {
+  height: 100svh;
+}
+.lab-runway[data-enhanced] {
+  height: 300svh;
+}
+.lab-stage {
+  height: 100svh;
+  min-height: 580px;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg);
+}
+.lab-paper {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--paper);
+  clip-path: inset(calc((1 - var(--paper-progress, 0)) * 100%) 0 0);
+}
+.lab-header {
+  position: absolute;
+  top: 30px;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  font: 11px/1.5 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lab-header,
+.lab-intro,
+.lab-caption {
+  /* The moving paper edge can cut through a line of type. Blending keeps both halves readable. */
+  color: var(--text);
+  mix-blend-mode: difference;
+}
+.lab-header a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 500;
+}
+.lab-header a span {
+  color: inherit;
+  margin-left: 12px;
+}
+.lab-intro {
+  position: absolute;
+  z-index: 2;
+  top: 20%;
+  left: var(--gutter);
+  pointer-events: none;
+}
+.lab-eyebrow {
+  font: 11px/1.5 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.lab-intro h1 {
+  font: 500 clamp(40px, 4.25vw, 68px)/0.99 var(--display);
+  letter-spacing: -0.055em;
+  margin: 22px 0;
+}
+.lab-intro > p:last-child {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.lab-object {
+  margin: 0;
+  position: absolute;
+  inset: 0;
+}
+.lab-canvas {
+  position: absolute;
+  inset: 0;
+}
+.lab-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.lab-fallback {
+  position: absolute;
+  width: 62%;
+  height: 75%;
+  right: 1%;
+  top: 17%;
+  color: var(--steel);
+}
+.lab-fallback-label {
+  position: absolute;
+  bottom: 17%;
+  right: 8%;
+  font: 11px/1.6 var(--mono);
+  max-width: 270px;
+}
+[data-ready] .lab-fallback,
+[data-ready] .lab-fallback-label {
+  display: none;
+}
+.lab-caption {
+  position: absolute;
+  z-index: 2;
+  bottom: 43px;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 12px/1.5 var(--mono);
+}
+.lab-instruction span {
+  margin-left: 22px;
+}
+.lab-folio {
+  font-size: 11px;
+}
+.lab-progress {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 27px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: left;
+  opacity: 0.65;
+}
+.lab-dimensions {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--drawing-labels, 0);
+  color: var(--ink);
+  font: 10px/1.5 var(--mono);
+}
+.lab-dimensions span {
+  position: absolute;
+  padding-top: 9px;
+  border-top: 1px solid #7c8580;
+}
+.lab-dimensions span:nth-child(1) {
+  top: 18%;
+  right: 10%;
+  width: 14%;
+}
+.lab-dimensions span:nth-child(2) {
+  bottom: 21%;
+  right: 17%;
+  width: 20%;
+}
+.lab-dimensions span:nth-child(3) {
+  bottom: 31%;
+  right: 3%;
+  width: 10%;
+}
+.lab-after {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 95px var(--gutter);
+  min-height: 75svh;
+}
+.lab-after h2 {
+  font: 500 clamp(32px, 4.5vw, 66px)/1.05 var(--display);
+  letter-spacing: -0.045em;
+  margin: 30px 0;
+}
+.lab-after > p:not(.lab-eyebrow) {
+  max-width: 500px;
+  line-height: 1.7;
+}
+.lab-after .lab-note {
+  font-size: 13px;
+  margin: 32px 0;
+}
+.lab-after a {
+  display: inline-flex;
+  align-items: center;
+  gap: 25px;
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .lab-runway[data-enhanced] {
+    height: 245svh;
+  }
+  .lab-header {
+    top: 14px;
+    font-size: 10px;
+  }
+  .lab-header > span {
+    display: none;
+  }
+  .lab-intro {
+    top: 12%;
+  }
+  .lab-intro h1 {
+    font-size: clamp(37px, 10vw, 55px);
+    margin: 14px 0;
+  }
+  .lab-intro > p:last-child {
+    font-size: 14px;
+  }
+  .lab-caption {
+    bottom: 34px;
+    font-size: 10px;
+    gap: 15px;
+    align-items: end;
+  }
+  .lab-instruction {
+    max-width: 140px;
+    text-align: right;
+  }
+  .lab-instruction span {
+    margin-left: 6px;
+  }
+  .lab-folio {
+    display: none;
+  }
+  .lab-progress {
+    bottom: 22px;
+  }
+  .lab-fallback {
+    width: 100%;
+    height: 55%;
+    top: 33%;
+    right: 0;
+  }
+  .lab-fallback-label {
+    bottom: 13%;
+    right: var(--gutter);
+    font-size: 10px;
+  }
+  .lab-dimensions span:nth-child(1) {
+    top: 35%;
+    right: 6%;
+    width: 30%;
+  }
+  .lab-dimensions span:nth-child(2) {
+    bottom: 15%;
+    right: 8%;
+    width: 38%;
+  }
+  .lab-dimensions span:nth-child(3) {
+    display: none;
+  }
+  .lab-after {
+    padding-top: 65px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-runway[data-enhanced] {
+    height: 100svh;
+  }
+  .lab-stage {
+    position: relative;
+  }
+  .lab-progress {
+    display: none;
+  }
+}

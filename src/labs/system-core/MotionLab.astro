@@ -1,0 +1,118 @@
+---
+import '../../styles/tokens.css';
+import './motion-lab.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Underneath — a system core study</title>
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="lab-skip" href="#after-core">
+      Skip the motion study
+    </a>
+    <main>
+      <section class="lab-runway" aria-labelledby="lab-title">
+        <div class="lab-stage">
+          <div class="lab-paper" aria-hidden="true"></div>
+          <header class="lab-header">
+            <a href="/">
+              MTK <span>/ Motion lab</span>
+            </a>
+            <span>Study 01 · local prototype</span>
+          </header>
+          <div class="lab-intro">
+            <p class="lab-eyebrow">A study in understanding</p>
+            <h1 id="lab-title">
+              What happens
+              <br /> underneath.
+            </h1>
+            <p>One system. Opened up.</p>
+          </div>
+          <figure
+            class="lab-object"
+            aria-label="Original system core: a graphite shell opens along its depth axis to reveal copper routes, a ceramic truss and an amber center, then becomes an exploded technical drawing."
+          >
+            <div class="lab-canvas" aria-hidden="true"></div>
+            <svg class="lab-fallback" viewBox="0 0 680 580" aria-hidden="true">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              >
+                <path d="M135 278 254 151 426 191 470 357 351 484 179 444Z M135 278 135 321 179 487 351 527 470 400 470 357 M179 444 179 487 M351 484 351 527" />
+                <g transform="translate(42 -65)">
+                  <path d="M151 290 262 175 409 210 447 352 337 462 191 429Z M183 295 270 204 386 231 415 344 328 433 213 405Z" />
+                  <path d="M223 279 347 388 M250 251 374 360 M277 223 401 332 M215 316 316 229 M226 354 357 242 M237 392 391 260" />
+                </g>
+                <g transform="translate(90 -128)">
+                  <path d="M135 278 254 151 426 191 470 357 351 484 179 444Z M167 286 265 183 400 215 437 349 339 451 205 420Z M135 278 135 300 179 466 351 506 470 379 470 357 M179 444 179 466 M351 484 351 506" />
+                </g>
+                <path
+                  stroke-dasharray="4 7"
+                  d="M135 278 225 150 M351 484 441 356 M470 357 560 229"
+                />
+              </g>
+            </svg>
+            <figcaption class="lab-fallback-label">
+              Static construction study · graphite shell / routing / open truss
+            </figcaption>
+          </figure>
+          <div class="lab-dimensions" aria-hidden="true">
+            <span>01 / Envelope</span>
+            <span>02 / Open structure</span>
+            <span>03 / Assembly axis</span>
+          </div>
+          <footer class="lab-caption">
+            <p class="lab-phase">Construction study</p>
+            <p class="lab-instruction">
+              Static view · scroll to continue <span aria-hidden="true">↓</span>
+            </p>
+            <span class="lab-folio" aria-hidden="true">
+              SC—001
+            </span>
+          </footer>
+          <div class="lab-progress" aria-hidden="true"></div>
+        </div>
+      </section>
+      <section
+        class="lab-after"
+        id="after-core"
+        tabindex="-1"
+        aria-labelledby="after-title"
+      >
+        <p class="lab-eyebrow">End of study</p>
+        <h2 id="after-title">
+          Understanding changes
+          <br /> how you see a system.
+        </h2>
+        <p>
+          A shell becomes an assembly. Connections become visible. The same
+          object becomes a drawing you can read.
+        </p>
+        <p class="lab-note">
+          Original procedural illustration. A visual metaphor, not a diagram of
+          production hardware.
+        </p>
+        <a href="/">
+          Return to the portfolio <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+    </main>
+    <script>
+      import { mountCore } from './scene';
+      const stage = document.querySelector<HTMLElement>('.lab-stage');
+      const runway = document.querySelector<HTMLElement>('.lab-runway');
+      if (stage && runway) {
+        const cleanup = mountCore(stage, runway);
+        if (import.meta.hot) import.meta.hot.dispose(cleanup);
+      }
+    </script>
+  </body>
+</html>
