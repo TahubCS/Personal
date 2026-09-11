@@ -111,6 +111,37 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
   };
   const materials = coreMaterials(uniforms);
   const { root, layers } = buildCore(materials);
+  // Surface anchors use the same world transforms and camera as the drawing.
+  const callouts = [
+    {
+      name: 'shroud',
+      layer: 4,
+      point: new Vector3(0, -1.65, 1.1),
+      offset: [70, 12],
+    },
+    {
+      name: 'frame',
+      layer: 3,
+      point: new Vector3(0, -1.5, 0.72),
+      offset: [70, 12],
+    },
+    {
+      name: 'core',
+      layer: 2,
+      point: new Vector3(0.17, 0.35, 0.49),
+      offset: [70, 110],
+    },
+    {
+      name: 'conductor',
+      layer: 1,
+      point: new Vector3(0, 0.8, -0.315),
+      offset: [70, 110],
+    },
+  ].map((anchor) => ({
+    ...anchor,
+    element: stage.querySelector<HTMLElement>(`.lab-callout--${anchor.name}`),
+  }));
+  const projectedAnchor = new Vector3();
   const objectBounds = new Box3();
   const objectSize = new Vector3();
   const objectCenter = new Vector3();
@@ -205,6 +236,26 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
       ? 'Static view · reduced motion'
       : 'Scroll to look underneath ↓';
     renderer.render(scene, camera);
+    for (const { element, layer, point, offset, name } of callouts) {
+      const group = layers[layer];
+      if (!element || !group) continue;
+      projectedAnchor.copy(point);
+      group.localToWorld(projectedAnchor).project(camera);
+      const x = ((projectedAnchor.x + 1) * width) / 2;
+      const y = ((1 - projectedAnchor.y) * height) / 2;
+      const left = Math.max(20, Math.min(width - 160, x - (offset[0] ?? 0)));
+      const top = y - (offset[1] ?? 0);
+      element.style.left = `${left}px`;
+      element.style.top = `${top}px`;
+      const dot = element.querySelector('circle');
+      dot?.setAttribute('cx', String(x - left));
+      dot?.setAttribute('cy', String(y - top));
+      const tail =
+        name === 'conductor' || name === 'core' ? '35,10 0,10' : '40,42 0,42';
+      element
+        .querySelector('polyline')
+        ?.setAttribute('points', `${x - left},${y - top} ${tail}`);
+    }
     stage.dataset.ready = '';
   }
 
@@ -302,6 +353,10 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     delete stage.dataset.ready;
     delete runway.dataset.enhanced;
     stage.style.removeProperty('--paper-clip');
+    for (const { element } of callouts) {
+      element?.style.removeProperty('left');
+      element?.style.removeProperty('top');
+    }
     window.removeEventListener('pagehide', onPageHide);
   }
   function onPageHide(event: PageTransitionEvent): void {

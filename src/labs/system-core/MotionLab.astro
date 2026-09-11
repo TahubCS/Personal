@@ -1,6 +1,7 @@
 ---
 import '../../styles/tokens.css';
 import './motion-lab.css';
+import assembledCore from './assets/assembled-core.webp?url';
 ---
 
 <!doctype html>
@@ -45,55 +46,77 @@ import './motion-lab.css';
             aria-label="Original system core: a graphite shell opens along its depth axis to reveal copper routes, a ceramic truss and an amber center, then becomes an exploded technical drawing."
           >
             <div class="lab-canvas" aria-hidden="true"></div>
-            <svg class="lab-fallback" viewBox="0 0 680 580" aria-hidden="true">
-              <g
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linejoin="round"
-              >
-                <path d="M135 278 254 151 426 191 470 357 351 484 179 444Z M135 278 135 321 179 487 351 527 470 400 470 357 M179 444 179 487 M351 484 351 527" />
-                <g transform="translate(42 -65)">
-                  <path d="M151 290 262 175 409 210 447 352 337 462 191 429Z M183 295 270 204 386 231 415 344 328 433 213 405Z" />
-                  <path d="M223 279 347 388 M250 251 374 360 M277 223 401 332 M215 316 316 229 M226 354 357 242 M237 392 391 260" />
-                </g>
-                <g transform="translate(90 -128)">
-                  <path d="M135 278 254 151 426 191 470 357 351 484 179 444Z M167 286 265 183 400 215 437 349 339 451 205 420Z M135 278 135 300 179 466 351 506 470 379 470 357 M179 444 179 466 M351 484 351 506" />
-                </g>
-                <path
-                  stroke-dasharray="4 7"
-                  d="M135 278 225 150 M351 484 441 356 M470 357 560 229"
-                />
-              </g>
-            </svg>
+            <img
+              class="lab-fallback"
+              src={assembledCore}
+              width="542"
+              height="580"
+              alt=""
+              aria-hidden="true"
+              fetchpriority="high"
+              loading="eager"
+            />
             <figcaption class="lab-fallback-label">
-              Static construction study · graphite shell / routing / open truss
+              Static construction study · assembled graphite shell / illuminated
+              core
             </figcaption>
           </figure>
           <div class="lab-dimensions" aria-hidden="true">
             <div class="lab-callout lab-callout--shroud">
-              <svg class="lab-callout__leader" width="80" height="50" viewBox="0 0 80 50" fill="none">
+              <svg
+                class="lab-callout__leader"
+                width="80"
+                height="50"
+                viewBox="0 0 80 50"
+                fill="none"
+              >
                 <circle cx="70" cy="12" r="2.5" class="lab-callout__dot" />
                 <polyline points="70,12 40,42 0,42" class="lab-callout__line" />
               </svg>
               <span class="lab-callout__label">01 / Front shroud</span>
             </div>
             <div class="lab-callout lab-callout--frame">
-              <svg class="lab-callout__leader" width="80" height="50" viewBox="0 0 80 50" fill="none">
+              <svg
+                class="lab-callout__leader"
+                width="80"
+                height="50"
+                viewBox="0 0 80 50"
+                fill="none"
+              >
                 <circle cx="70" cy="12" r="2.5" class="lab-callout__dot" />
                 <polyline points="70,12 40,42 0,42" class="lab-callout__line" />
               </svg>
               <span class="lab-callout__label">02 / Ceramic frame</span>
             </div>
             <div class="lab-callout lab-callout--core">
-              <svg class="lab-callout__leader" width="80" height="120" viewBox="0 0 80 120" fill="none">
-                <circle cx="70" cy="110" r="2.5" class="lab-callout__dot lab-callout__dot--amber" />
-                <polyline points="70,110 35,10 0,10" class="lab-callout__line" />
+              <svg
+                class="lab-callout__leader"
+                width="80"
+                height="120"
+                viewBox="0 0 80 120"
+                fill="none"
+              >
+                <circle
+                  cx="70"
+                  cy="110"
+                  r="2.5"
+                  class="lab-callout__dot lab-callout__dot--amber"
+                />
+                <polyline
+                  points="70,110 35,10 0,10"
+                  class="lab-callout__line"
+                />
               </svg>
               <span class="lab-callout__label">03 / Amber core</span>
             </div>
             <div class="lab-callout lab-callout--conductor">
-              <svg class="lab-callout__leader" width="140" height="50" viewBox="0 0 140 50" fill="none">
+              <svg
+                class="lab-callout__leader"
+                width="140"
+                height="50"
+                viewBox="0 0 140 50"
+                fill="none"
+              >
                 <circle cx="10" cy="38" r="2.5" class="lab-callout__dot" />
                 <polyline points="10,38 40,8 140,8" class="lab-callout__line" />
               </svg>
@@ -101,7 +124,9 @@ import './motion-lab.css';
             </div>
             <div class="lab-datum-block">
               <span class="lab-datum-block__title">DRAWING REF · SC—001</span>
-              <span class="lab-datum-block__spec">SCALE 1:1 · ISO 128-30 · 16MM GRID</span>
+              <span class="lab-datum-block__spec">
+                SCALE 1:1 · ISO 128-30 · 16MM GRID
+              </span>
             </div>
           </div>
           <footer class="lab-caption">

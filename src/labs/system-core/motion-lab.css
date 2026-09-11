@@ -39,6 +39,7 @@ a:focus-visible {
   height: 300svh;
 }
 .lab-stage {
+  container-type: size;
   height: 100svh;
   min-height: 580px;
   position: sticky;
@@ -57,7 +58,11 @@ a:focus-visible {
     linear-gradient(to bottom, rgba(23, 33, 36, 0.035) 1px, transparent 1px),
     linear-gradient(to right, rgba(23, 33, 36, 0.075) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(23, 33, 36, 0.075) 1px, transparent 1px);
-  background-size: 16px 16px, 16px 16px, 64px 64px, 64px 64px;
+  background-size:
+    16px 16px,
+    16px 16px,
+    64px 64px,
+    64px 64px;
   clip-path: var(--paper-clip, polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%));
 }
 .lab-paper-border {
@@ -73,10 +78,22 @@ a:focus-visible {
   pointer-events: none;
   user-select: none;
 }
-.lab-datum--tl { top: 9px; left: 9px; }
-.lab-datum--tr { top: 9px; right: 9px; }
-.lab-datum--bl { bottom: 9px; left: 9px; }
-.lab-datum--br { bottom: 9px; right: 9px; }
+.lab-datum--tl {
+  top: 9px;
+  left: 9px;
+}
+.lab-datum--tr {
+  top: 9px;
+  right: 9px;
+}
+.lab-datum--bl {
+  bottom: 9px;
+  left: 9px;
+}
+.lab-datum--br {
+  bottom: 9px;
+  right: 9px;
+}
 .lab-header {
   position: absolute;
   top: 30px;
@@ -141,17 +158,23 @@ a:focus-visible {
   inset: 0;
 }
 .lab-canvas canvas {
+  visibility: hidden;
   display: block;
   width: 100%;
   height: 100%;
 }
 .lab-fallback {
   position: absolute;
-  width: 62%;
-  height: 75%;
-  right: 1%;
-  top: 17%;
+  left: 66%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* Real 542 � 580 capture at a 6.8-unit camera height. Match scene.ts
+     framing limits, including its conservative geometry bounds. */
+  width: min(60.2222cqh, 62.0153cqw);
+  height: auto;
+  aspect-ratio: 542 / 580;
   color: var(--steel);
+  pointer-events: none;
 }
 .lab-fallback-label {
   position: absolute;
@@ -159,6 +182,9 @@ a:focus-visible {
   right: 8%;
   font: 11px/1.6 var(--mono);
   max-width: 270px;
+}
+[data-ready] .lab-canvas canvas {
+  visibility: visible;
 }
 [data-ready] .lab-fallback,
 [data-ready] .lab-fallback-label {
@@ -229,36 +255,20 @@ a:focus-visible {
   color: var(--ink);
   white-space: nowrap;
 }
-.lab-callout--shroud {
-  left: calc(41.5% - 70px);
-  top: calc(73% - 12px);
-}
 .lab-callout--shroud .lab-callout__label {
   left: 0;
   top: 47px;
-}
-.lab-callout--frame {
-  left: calc(56.5% - 70px);
-  top: calc(67% - 12px);
 }
 .lab-callout--frame .lab-callout__label {
   left: 0;
   top: 47px;
 }
-.lab-callout--core {
-  left: calc(67.5% - 70px);
-  top: calc(47% - 110px);
-}
 .lab-callout--core .lab-callout__label {
   left: 0;
   top: -4px;
 }
-.lab-callout--conductor {
-  left: calc(77% - 10px);
-  top: calc(34% - 38px);
-}
 .lab-callout--conductor .lab-callout__label {
-  left: 42px;
+  left: 0;
   top: -5px;
 }
 .lab-datum-block {
@@ -310,10 +320,22 @@ a:focus-visible {
   .lab-paper-border {
     inset: 8px;
   }
-  .lab-datum--tl { top: 4px; left: 4px; }
-  .lab-datum--tr { top: 4px; right: 4px; }
-  .lab-datum--bl { bottom: 4px; left: 4px; }
-  .lab-datum--br { bottom: 4px; right: 4px; }
+  .lab-datum--tl {
+    top: 4px;
+    left: 4px;
+  }
+  .lab-datum--tr {
+    top: 4px;
+    right: 4px;
+  }
+  .lab-datum--bl {
+    bottom: 4px;
+    left: 4px;
+  }
+  .lab-datum--br {
+    bottom: 4px;
+    right: 4px;
+  }
   .lab-header {
     top: 14px;
     font-size: 10px;
@@ -351,39 +373,22 @@ a:focus-visible {
     bottom: 22px;
   }
   .lab-fallback {
-    width: 100%;
-    height: 55%;
-    top: 33%;
-    right: 0;
+    left: 50%;
+    top: 62%;
+    width: min(48.2819cqh, 88.5933cqw);
   }
   .lab-fallback-label {
-    bottom: 13%;
+    bottom: 12%;
     right: var(--gutter);
+    left: var(--gutter);
+    max-width: none;
+    text-align: center;
     font-size: 10px;
   }
   .lab-callout--frame,
   .lab-callout--core,
   .lab-datum-block {
     display: none;
-  }
-  .lab-callout--shroud {
-    left: 8%;
-    top: auto;
-    bottom: 18%;
-  }
-  .lab-callout--conductor {
-    display: block;
-    left: auto;
-    right: 8%;
-    top: 34%;
-  }
-  .lab-callout--conductor .lab-callout__leader {
-    display: none;
-  }
-  .lab-callout--conductor .lab-callout__label {
-    position: static;
-    border-bottom: 1px solid var(--boundary);
-    padding-bottom: 4px;
   }
   .lab-after {
     padding-top: 65px;
