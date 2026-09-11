@@ -16,6 +16,48 @@ import { buildCore } from './geometry';
 import { coreMaterials } from './materials';
 import { corePose, normalizedProgress } from './pose';
 
+export function paperClipPolygon(p: number, angle: number): string {
+  if (p <= 0.0001) return 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)';
+  if (p >= 0.9999) return 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+  const C = p * (cosA + sinA);
+
+  const pts = ['0% 100%'];
+
+  // Bottom edge (y = 100%, x going from 0% to 100%)
+  const xBottom = C / cosA;
+  if (xBottom < 1.0) {
+    pts.push(`${(xBottom * 100).toFixed(2)}% 100%`);
+  } else {
+    pts.push('100% 100%');
+    // Right edge (x = 100%, y going from 100% down to 0%)
+    const yRight = 1.0 - (C - cosA) / sinA;
+    if (yRight > 0.0) {
+      pts.push(`100% ${(yRight * 100).toFixed(2)}%`);
+    } else {
+      pts.push('100% 0%');
+    }
+  }
+
+  // Top edge (y = 0%, x going from 100% down to 0%)
+  const xTop = (C - sinA) / cosA;
+  if (xTop > 0.0 && xTop < 1.0) {
+    pts.push(`${(xTop * 100).toFixed(2)}% 0%`);
+  }
+
+  // Left edge (x = 0%, y going from 0% down to 100%)
+  const yLeft = 1.0 - C / sinA;
+  if (yLeft > 0.0) {
+    pts.push(`0% ${(yLeft * 100).toFixed(2)}%`);
+  } else {
+    pts.push('0% 0%');
+  }
+
+  return `polygon(${pts.join(', ')})`;
+}
+
 export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
   const host = stage.querySelector<HTMLElement>('.lab-canvas');
   const phase = stage.querySelector<HTMLElement>('.lab-phase');
@@ -142,6 +184,10 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     materials.edgeSubdued.visible = paperActive;
     materials.edgeSignal.visible = paperActive;
     renderer.shadowMap.autoUpdate = pose.paper < 1;
+    stage.style.setProperty(
+      '--paper-clip',
+      paperClipPolygon(pose.paper, uniforms.angle.value),
+    );
     stage.style.setProperty('--paper-progress', String(pose.paper));
     stage.style.setProperty('--scroll-progress', String(progress));
     stage.style.setProperty(
@@ -181,6 +227,7 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     renderer.domElement.style.visibility = 'hidden';
     delete stage.dataset.ready;
     delete runway.dataset.enhanced;
+    stage.style.removeProperty('--paper-clip');
     stage.style.removeProperty('--paper-progress');
     stage.style.removeProperty('--drawing-labels');
     labels.phase.textContent = 'Construction study';
@@ -254,6 +301,7 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     renderer.domElement.remove();
     delete stage.dataset.ready;
     delete runway.dataset.enhanced;
+    stage.style.removeProperty('--paper-clip');
     window.removeEventListener('pagehide', onPageHide);
   }
   function onPageHide(event: PageTransitionEvent): void {
