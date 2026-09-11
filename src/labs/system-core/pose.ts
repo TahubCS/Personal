@@ -22,7 +22,7 @@ export function corePose(
 ): CorePose {
   const p = normalizedProgress(progress);
   const turn = easeBetween(p, 0.02, 0.22);
-  const settle = easeBetween(p, 0.62, 1);
+  const settle = easeBetween(p, 0.61, 0.88);
   return {
     rotation: [
       0.08 + turn * (layout === 'narrow' ? 0.87 : 0.37),
@@ -38,7 +38,7 @@ export function corePose(
       2.25 * easeBetween(p, 0.27, 0.43),
       5.5 * easeBetween(p, 0.18, 0.35),
     ],
-    paper: easeBetween(p, 0.61, 0.91),
+    paper: easeBetween(p, 0.61, 0.88),
     exposure: easeBetween(p, 0.22, 0.48),
     scale: 1 + 0.08 * easeBetween(p, 0, 0.2) - 0.19 * easeBetween(p, 0.2, 0.52),
   };

@@ -192,7 +192,7 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     stage.style.setProperty('--scroll-progress', String(progress));
     stage.style.setProperty(
       '--drawing-labels',
-      String(normalizedProgress((progress - 0.89) / 0.08)),
+      String(normalizedProgress((progress - 0.88) / 0.08)),
     );
     stage.dataset.progress = progress.toFixed(4);
     labels.phase.textContent =

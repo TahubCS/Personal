@@ -39,10 +39,19 @@ test('the assembled pose is shared across layouts and remains unlit by the revea
   assert.equal(corePose(0).exposure, 0);
 });
 
-test('the opened pose holds still before the unchanged paper transition', () => {
+test('the opened pose holds still before the paper transition (52% to 61%)', () => {
   for (const layout of ['wide', 'narrow'] as const) {
-    assert.deepEqual(corePose(0.52, layout), corePose(0.6, layout));
+    assert.deepEqual(corePose(0.52, layout), corePose(0.61, layout));
+    assert.equal(corePose(0.52, layout).paper, 0);
     assert.equal(corePose(0.61, layout).paper, 0);
-    assert.equal(corePose(0.91, layout).paper, 1);
+  }
+});
+
+test('the paper wipe completes by 88% and drawing pose holds still (88% to 100%)', () => {
+  for (const layout of ['wide', 'narrow'] as const) {
+    assert.equal(corePose(0.88, layout).paper, 1);
+    assert.equal(corePose(1, layout).paper, 1);
+    assert.deepEqual(corePose(0.88, layout), corePose(0.94, layout));
+    assert.deepEqual(corePose(0.88, layout), corePose(1, layout));
   }
 });
