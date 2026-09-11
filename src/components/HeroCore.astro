@@ -1,0 +1,120 @@
+---
+import systemCore from '../assets/system-core.webp?url';
+---
+
+<figure
+  class="hero-core"
+  aria-label="Original system core illustration: a graphite enclosure opens along a shared axis to reveal its frame, conductors and amber center."
+>
+  <div class="hero-core-stage">
+    <div class="hero-core-canvas" aria-hidden="true"></div>
+    <img
+      src={systemCore}
+      width="542"
+      height="580"
+      alt="Original system core illustration: a graphite enclosure surrounding an amber center and exposed internal structure."
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <figcaption class="eyebrow">
+    <span>System core / Original study</span>
+    <span aria-hidden="true">01</span>
+  </figcaption>
+</figure>
+
+<style>
+  .hero-core {
+    grid-area: study;
+    min-width: 0;
+    margin: 0;
+  }
+  .hero-core-stage {
+    position: relative;
+  }
+  .hero-core-canvas {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+  }
+  .hero-core-canvas :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  [data-ready] .hero-core-canvas {
+    visibility: visible;
+  }
+  [data-ready] img {
+    visibility: hidden;
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 540px;
+    object-fit: contain;
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  @media (max-width: 767px) {
+    img {
+      height: 280px;
+      width: 100%;
+    }
+    figcaption {
+      margin-top: 16px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-core {
+      position: sticky;
+      top: var(--core-pin-top, 165px);
+      align-self: start;
+    }
+  }
+  @media (max-width: 767px) {
+    .hero-core {
+      top: 90px;
+    }
+  }
+  @media (max-width: 359px) {
+    .hero-core {
+      top: 140px;
+    }
+  }
+</style>
+<script>
+  const figure = document.querySelector<HTMLElement>('.hero-core');
+  const opening = document.querySelector<HTMLElement>('.hero-opening');
+  const preference = matchMedia('(prefers-reduced-motion: reduce)');
+  let cleanup: (() => void) | undefined;
+  let generation = 0;
+  async function update() {
+    const current = ++generation;
+    cleanup?.();
+    cleanup = undefined;
+    if (!figure || !opening || preference.matches) return;
+    try {
+      const { mountHeroCore } = await import('../features/hero-core/scene');
+      if (current === generation) cleanup = mountHeroCore(figure, opening);
+    } catch (error) {
+      opening.dataset.static = '';
+      console.warn('[hero-core] Keeping the static illustration.', error);
+    }
+  }
+  void update();
+  preference.addEventListener('change', update);
+  if (import.meta.hot)
+    import.meta.hot.dispose(() => {
+      generation++;
+      cleanup?.();
+      preference.removeEventListener('change', update);
+    });
+</script>

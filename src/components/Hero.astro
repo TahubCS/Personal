@@ -1,40 +1,44 @@
 ---
 import { profile } from '../data/profile';
 import ProjectIndex from './ProjectIndex.astro';
-import SystemArtifact from './SystemArtifact.astro';
+import HeroCore from './HeroCore.astro';
 ---
 
 <section class="hero shell" data-motion="hero" aria-labelledby="identity">
-  <div class="hero-top eyebrow">
-    <span>Portfolio / Selected systems</span>
-    <span>East Carolina University</span>
-  </div>
-  <div class="hero-grid">
-    <div class="identity">
-      <p class="eyebrow intro-label">Hello, I'm</p>
-      <h1 id="identity" aria-label="Muhammad Tahub Khatri">
-        <span class="name-first">Muhammad</span>{' '}
-        <span class="line-break">
-          Tahub <em>Khatri.</em>
-        </span>
-      </h1>
-      <p class="intro">{profile.introduction}</p>
-      <p class="availability">
-        <span aria-hidden="true"></span>
-        {profile.availability}
-      </p>
-      <div class="actions">
-        <a class="button primary" href="#work">
-          Explore my work ↓
-        </a>
-        <a class="text-link" href={profile.github}>
-          Connect on GitHub ↗
-        </a>
+  <div class="hero-runway">
+    <div class="hero-pin">
+      <div class="hero-top eyebrow">
+        <span>Portfolio / Selected systems</span>
+        <span>East Carolina University</span>
+      </div>
+      <div class="hero-opening">
+        <div class="identity">
+          <p class="eyebrow intro-label">Hello, I'm</p>
+          <h1 id="identity" aria-label="Muhammad Tahub Khatri">
+            <span class="name-first">Muhammad</span>{' '}
+            <span class="line-break">
+              Tahub <em>Khatri.</em>
+            </span>
+          </h1>
+          <p class="intro">{profile.introduction}</p>
+          <p class="availability">
+            <span aria-hidden="true"></span>
+            {profile.availability}
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#work">
+              Explore my work ↓
+            </a>
+            <a class="text-link" href={profile.github}>
+              Connect on GitHub ↗
+            </a>
+          </div>
+        </div>
+        <HeroCore />
       </div>
     </div>
-    <ProjectIndex />
-    <SystemArtifact />
   </div>
+  <ProjectIndex />
   <div class="hero-route">
     <span class="eyebrow">One question. Follow its path.</span>
     <a href="#trace">Enter the system ↓</a>
@@ -53,12 +57,14 @@ import SystemArtifact from './SystemArtifact.astro';
   .hero-top {
     margin-bottom: 32px;
   }
-  .hero-grid {
+  .hero-opening {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 7%;
+    grid-template-columns: 1.15fr 1fr;
+    column-gap: 6%;
+    row-gap: 32px;
     align-items: center;
-    grid-template-areas: 'identity study' 'index index';
+    grid-template-areas: 'identity study';
+    position: relative;
   }
   .identity {
     grid-area: identity;
@@ -105,7 +111,7 @@ import SystemArtifact from './SystemArtifact.astro';
     border-top: 1px solid var(--line);
   }
   @media (max-width: 1023px) {
-    .hero-grid {
+    .hero-opening {
       gap: 32px;
       grid-template-columns: 1.2fr 1fr;
     }
@@ -118,9 +124,9 @@ import SystemArtifact from './SystemArtifact.astro';
     .hero-top span:last-child {
       display: none;
     }
-    .hero-grid {
+    .hero-opening {
       grid-template-columns: minmax(0, 1fr);
-      grid-template-areas: 'identity' 'index' 'study';
+      grid-template-areas: 'identity' 'study';
     }
     .intro {
       font-size: 16px;
@@ -132,4 +138,73 @@ import SystemArtifact from './SystemArtifact.astro';
       font-size: 12px;
     }
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-opening:not([data-static]) {
+      --opening-travel: min(60svh, 540px);
+      min-height: calc(var(--opening-height, 580px) + var(--opening-travel));
+      grid-template-rows: 1fr;
+    }
+    .hero-opening:not([data-static]) .identity {
+      position: sticky;
+      top: var(--identity-pin-top, 209px);
+      align-self: start;
+      margin-top: 44px;
+    }
+  }
+  .hero-runway,
+  .hero-pin {
+    display: contents;
+  }
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .hero-runway {
+      display: block;
+      min-height: calc(var(--composition-height, 630px) + min(60svh, 540px));
+    }
+    .hero-pin {
+      display: block;
+      position: sticky;
+      top: var(--hero-pin-top, 113px);
+    }
+    .hero-opening:not([data-static]) {
+      min-height: 0;
+    }
+    .hero-opening:not([data-static]) .identity,
+    .hero-opening :global(.hero-core) {
+      position: static;
+    }
+    .hero-runway:has([data-static]) {
+      min-height: 0;
+    }
+    .hero-runway:has([data-static]) .hero-pin {
+      position: static;
+    }
+  }
+  @media (max-width: 1023px) {
+    .hero-opening:not([data-static]) .identity {
+      margin-top: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    .hero-opening:not([data-static]) {
+      --opening-travel: min(42svh, 360px);
+      --opening-height: 780px;
+      grid-template-rows: auto 1fr;
+    }
+    .hero-opening:not([data-static]) .identity {
+      position: static;
+    }
+  }
 </style>
+<noscript>
+  <style is:global>
+    .hero-runway,
+    .hero-opening {
+      min-height: 0 !important;
+    }
+    .hero-pin,
+    .hero-opening .identity,
+    .hero-opening .hero-core {
+      position: static !important;
+    }
+  </style>
+</noscript>
