@@ -8,6 +8,9 @@ body {
   margin: 0;
   font-family: var(--body);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 a {
   color: inherit;
@@ -66,10 +69,12 @@ a:focus-visible {
 }
 .lab-header,
 .lab-intro,
-.lab-caption {
-  /* The moving paper edge can cut through a line of type. Blending keeps both halves readable. */
+.lab-caption,
+.lab-progress {
+  /* The moving paper edge can cut through type or runway progress. Blending keeps both halves readable. */
   color: var(--text);
   mix-blend-mode: difference;
+  z-index: 2;
 }
 .lab-header a {
   min-height: 44px;
@@ -175,7 +180,7 @@ a:focus-visible {
 .lab-dimensions span {
   position: absolute;
   padding-top: 9px;
-  border-top: 1px solid #7c8580;
+  border-top: 1px solid var(--boundary);
 }
 .lab-dimensions span:nth-child(1) {
   top: 18%;
