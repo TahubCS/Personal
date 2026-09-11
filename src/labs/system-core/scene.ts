@@ -61,7 +61,12 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
   environmentGenerator.dispose();
   const camera = new OrthographicCamera(-5, 5, 3.4, -3.4, 0.1, 100);
   camera.position.z = 20;
-  const uniforms = { paper: { value: 0 }, height: { value: 1 } };
+  const uniforms = {
+    paper: { value: 0 },
+    height: { value: 1 },
+    width: { value: 1 },
+    angle: { value: 0.5 },
+  };
   const materials = coreMaterials(uniforms);
   const { root, layers } = buildCore(materials);
   const objectBounds = new Box3();
@@ -166,6 +171,8 @@ export function mountCore(stage: HTMLElement, runway: HTMLElement): () => void {
     height = stage.clientHeight;
     renderer.setSize(width, height, false);
     uniforms.height.value = renderer.domElement.height;
+    uniforms.width.value = renderer.domElement.width;
+    uniforms.angle.value = width < 701 ? 0.82 : 0.5;
     schedule();
   }
   function onContextLost(event: Event): void {

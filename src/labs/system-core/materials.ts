@@ -3,6 +3,8 @@ import { Color, LineBasicMaterial, MeshStandardMaterial } from 'three';
 export interface DrawingUniforms {
   readonly paper: { value: number };
   readonly height: { value: number };
+  readonly width?: { value: number };
+  readonly angle?: { value: number };
 }
 
 interface DrawingCutOptions {
@@ -33,14 +35,24 @@ function applyDrawingCut(
         ? 'core-drawing-edge'
         : 'core-drawing-surface';
 
+  const widthUniform = uniforms.width ?? { value: 1440 };
+  const angleUniform = uniforms.angle ?? { value: 0.5 };
+
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uPaper = uniforms.paper;
     shader.uniforms.uHeight = uniforms.height;
-    shader.fragmentShader = `uniform float uPaper;\nuniform float uHeight;\n${shader.fragmentShader}`;
+    shader.uniforms.uWidth = widthUniform;
+    shader.uniforms.uAngle = angleUniform;
+    shader.fragmentShader = `uniform float uPaper;\nuniform float uHeight;\nuniform float uWidth;\nuniform float uAngle;\n${shader.fragmentShader}`;
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <dithering_fragment>',
       `#include <dithering_fragment>
-       float onPaper = step(gl_FragCoord.y, uHeight * uPaper);
+       vec2 uv = gl_FragCoord.xy / vec2(uWidth, uHeight);
+       float cosA = cos(uAngle);
+       float sinA = sin(uAngle);
+       float span = cosA + sinA;
+       float proj = (uv.x * cosA + uv.y * sinA) / span;
+       float onPaper = step(proj, uPaper);
        gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${isInk ? inkColor : '0.949, 0.937, 0.906'}), onPaper);
        gl_FragColor.a = mix(gl_FragColor.a, ${targetAlpha}, onPaper);`,
     );
