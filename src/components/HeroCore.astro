@@ -77,6 +77,8 @@ import systemCore from '../assets/system-core.webp?url';
       position: sticky;
       top: var(--core-pin-top, 165px);
       align-self: start;
+      transform: translateY(calc(-1 * var(--core-depart-y, 0px)));
+      will-change: transform;
     }
   }
   @media (max-width: 767px) {

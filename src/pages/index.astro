@@ -13,14 +13,28 @@ import ContactFooter from '../components/ContactFooter.astro';
   <SiteHeader />
   <main id="main">
     <Hero />
-    <section id="trace" class="shell section">
-      <p class="eyebrow">Inside the system / Context Compiler</p>
-      <h2>Follow the question.</h2>
-      <p class="muted">
-        An agent needs more than a repository. It needs the right pieces of it.
-        Explore how a search moves through authentication, embeddings, and
-        retrieval to become useful context.
-      </p>
+    <section id="trace" class="shell section trace-section">
+      <div class="trace-handoff">
+        <div class="project-intro">
+          <p class="eyebrow">Inside the system / Context Compiler</p>
+          <h2>Follow the question.</h2>
+          <p class="muted intro">
+            An agent needs more than a repository. It needs the right pieces of it.
+            Explore how a search moves through authentication, embeddings, and
+            retrieval to become useful context.
+          </p>
+        </div>
+        <div class="handoff-question" aria-label="Question handoff">
+          <span class="thread" aria-hidden="true"></span>
+          <p class="eyebrow">Question / Natural language</p>
+          <h3 class="question-title">
+            Where is access
+            <br />
+            resolved?
+          </h3>
+          <p class="technical">Question → useful context</p>
+        </div>
+      </div>
       <div class="trace-runway">
         <ContextTrace client:visible />
       </div>

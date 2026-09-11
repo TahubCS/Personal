@@ -468,35 +468,6 @@
   transform: translateY(calc(var(--progress) * 80px))
     rotate(calc(-3deg + var(--progress) * 3deg));
 }
-.hero-route {
-  height: 100px;
-  position: relative;
-  margin-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.hero-route::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 73%;
-  width: 1px;
-  height: 100%;
-  background: var(--accent);
-  transform-origin: top;
-  transform: scaleY(calc(0.25 + var(--progress) * 0.75));
-}
-.hero-route span {
-  position: absolute;
-  top: 24px;
-  left: 0;
-}
-.hero-route a {
-  position: absolute;
-  right: 0;
-  top: 16px;
-  padding-block: 12px;
-  font-size: 14px;
-}
 .line-break {
   display: block;
 }
@@ -541,21 +512,9 @@
     font-size: 12px;
     padding: 16px;
   }
-  .hero-route {
-    height: 72px;
-  }
-  .hero-route span {
-    display: none;
-  }
-  .hero-route::after {
-    left: 24px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   [data-motion] {
     --progress: 0 !important;
-  }
-  .hero-route::after {
-    transform: none;
   }
 }
