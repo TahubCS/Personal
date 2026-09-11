@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+
+await mkdir('artifacts/motion-lab', { recursive: true });
 
 const browser = await chromium.launch({
   channel: 'msedge',
@@ -25,7 +27,7 @@ await page.screenshot({ path: 'artifacts/motion-lab/webgl-unavailable.png' });
 await writeFile(
   'artifacts/motion-lab/fallback.json',
   JSON.stringify(
-    { result: 'Static SVG remains visible; runway removed', messages },
+    { result: 'Assembled image remains visible; runway removed', messages },
     null,
     2,
   ),

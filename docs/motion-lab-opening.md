@@ -1,5 +1,7 @@
 # Motion lab: readable opening sequence
 
+**Historical opening-pass report.** See [current prototype status](motion-lab.md) for subsequent drawing and loading revisions. The results below describe the original pass.
+
 Local review: http://127.0.0.1:4321/motion-lab
 
 Baseline: `716df41`. This pass changes the opening pose model and a restrained exposed-state fill adjustment. Geometry, materials, layout, fonts, route injection, native scroll distance, static SVG fallback, and paper-wipe shader are unchanged. No dependencies, lights, render passes, idle animation, homepage integration or deployment were added.
@@ -12,17 +14,19 @@ Baseline: `716df41`. This pass changes the opening pose model and a restrained e
 - The conductor assembly and rear enclosure have a wider final gap. The core is readable between the ceramic frame and conductors.
 - At 390px, the complete assembly uses a steeper diagonal axis so the exposed parts use more of the available height. Every part retains the same shared local depth axis; no radial scattering or independent component rotations were introduced.
 
-## Choreography
+## Current choreography
 
-| Scroll interval | Action |
-| --- | --- |
-| 2–22% | Establish depth through rotation; roughly 90% of this turn completes before the cover starts moving |
-| 18–35% | Front cover moves forward to +5.5 units |
-| 27–43% | Ceramic frame moves forward to +2.25 units |
-| 30–50% | Rear enclosure moves backward to −4.2 units |
-| 34–52% | Conductors move backward to −1.6 units |
-| 52–61% | Complete exposed pose holds; offsets, scale, rotation and fill are stationary |
-| 61–91% | Existing paper wipe proceeds with the exposed arrangement |
+The later drawing revision shortened the original 61�91% wipe to 61�88%.
+
+| Scroll interval | Action                                                                                              |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| 2–22%           | Establish depth through rotation; roughly 90% of this turn completes before the cover starts moving |
+| 18–35%          | Front cover moves forward to +5.5 units                                                             |
+| 27–43%          | Ceramic frame moves forward to +2.25 units                                                          |
+| 30–50%          | Rear enclosure moves backward to −4.2 units                                                         |
+| 34–52%          | Conductors move backward to −1.6 units                                                              |
+| 52–61%          | Complete exposed pose holds; offsets, scale, rotation and fill are stationary                       |
+| 61–91%          | Existing paper wipe proceeds with the exposed arrangement                                           |
 
 The central core remains at its original assembly origin. Poses are deterministic functions of scroll position. Wide and narrow layouts begin at the exact same original rotation. Existing automatic framing accommodates the wider separation without changing page layout or scroll distance.
 

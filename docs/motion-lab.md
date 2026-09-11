@@ -2,116 +2,59 @@
 
 Local preview: http://127.0.0.1:4321/motion-lab
 
-This is an isolated development study on `codex/motion-lab`. No homepage components, project content, case-study routes, contact links, or deployment settings were redesigned. Nothing was pushed or deployed. The existing uncommitted `.gitignore` change is outside this work.
+This route is injected only during Astro development. It remains outside the production homepage and case studies. Integration and deployment are separate decisions.
 
-## Direct reference study and storyboard
+## Current behavior
 
-The supplied `anime js visualisation.mp4` was opened in Edge and examined at 5, 7.5, 10, 12.5, and 15 seconds. The extracted principle is continuity of geometry: a front view becomes a deep assembly, then the same parts become linework. The reference's mechanical instrument, circular silhouette, rainbow accents, labels, assets, and animation code were not used.
+One procedural object rotates to establish depth, opens along a shared mechanical axis, and becomes a technical drawing. The graphite enclosure, ceramic frame, quieter internal truss and warm conductors retain the amber core as the visual reference. No idle animation, scroll smoothing or new motion dependency is used.
 
-The five-frame storyboard was presented before implementation:
+| Scroll interval | Behavior                                                              |
+| --------------- | --------------------------------------------------------------------- |
+| 2–22%           | Depth-establishing rotation                                           |
+| 18–35%          | Front shell clears the core                                           |
+| 27–43%          | Ceramic frame separates                                               |
+| 30–50%          | Rear enclosure opens                                                  |
+| 34–52%          | Conductors separate                                                   |
+| 52–61%          | Exposed assembly holds                                                |
+| 61–88%          | Diagonal dark-to-paper wipe; the same surfaces become shaded linework |
+| 88–100%         | Drawing pose holds; projected callouts appear from 88–96%             |
 
-| Progress | Intended composition                                                            |
-| -------- | ------------------------------------------------------------------------------- |
-| 0%       | Compact graphite envelope, near-front view, amber aperture                      |
-| 25%      | Three-quarter rotation exposes deep sidewalls and the opening seam              |
-| 50%      | Shell, ceramic frame, lattice, and conductors separate along the depth axis     |
-| 75%      | Advancing paper surface turns the same exposed geometry into linework           |
-| 100%     | Exploded technical drawing, short annotations, followed by the end of the study |
+The pose is a deterministic function of native scroll position. Mobile uses a steeper shared axis and shorter scroll runway. Reduced motion removes extra scroll travel and presents the static drawing. Drawn callouts follow projected component anchors rather than fixed screen percentages. The drafting metadata states “Illustrative · not to scale”; no manufacturing dimensions or standards compliance are claimed.
 
-The original geometry comprises a beveled asymmetric octagonal envelope, deep side rails, copper comb conductors, a ceramic truss, an offset center, and a separate inner frame. It is an illustrative software metaphor, not a claim about real hardware construction. All geometry is procedural. No external model, texture, product screenshot, or paid asset is needed.
+## Loading and fallback
 
-## Implementation
+A transparent 542 × 580 lossless WebP capture of the real assembled object replaces the earlier glowing SVG. It is 84,600 bytes, stored in `src/labs/system-core/assets/assembled-core.webp`. Responsive sizing matches the camera framing. The image stays visible until the first WebGL render sets `data-ready`; the switch uses neither a fade nor a timer. It also remains usable with JavaScript or WebGL unavailable. See [loading verification](motion-lab-loading.md).
 
-Astro injects `/motion-lab` only for the `dev` command. Its entry point lives outside `src/pages`. This prevents accidental production publishing. Three.js 0.186.0 and its types are development dependencies; no Anime.js, GSAP, scroll smoothing, or additional React island was added.
+## Maintained files and commands
 
-The pose function is independent of the renderer. Scroll position determines rotations, ordered layer offsets, scale, and the paper boundary. It has no elapsed-time state, easing catch-up, autoplay, or idle loop. Returning to a position returns to the same pose. Layer motion shares local Z; the object's rotation presents that axis diagonally.
+- `src/labs/system-core/MotionLab.astro`: semantic lab page, matching loading image and drawing annotations.
+- `scene.ts`: camera, on-demand rendering, projected callouts, events and cleanup.
+- `pose.ts`: reversible rotation, offsets, exposed hold and paper timing.
+- `geometry.ts` / `materials.ts`: original procedural assembly and drawing treatment.
+- `motion-lab.css`: responsive composition and fallbacks.
+- `*.test.ts`: pose, visibility and geometry regressions.
 
-Three.js supplies real volume, consistent occlusion, bevels, lighting, and shared surface/edge geometry. A generated room environment provides reflections without an image download. A shader changes material output at the same screen-space boundary as the paper wipe. This is one assembly, not two crossfaded poses. The light-side faces remain opaque to suppress hidden edges. Text uses difference blending so a moving boundary can cross a line without making it disappear.
+`npm test` now runs both the Context Compiler and motion-lab unit suites. Use `npm run test:lab` for just the lab and `npm run test:lab:browser` for its browser verification (dev server required). `npm run capture:lab` and `npm run record:lab` are the maintained visual-evidence entry points. See [script guide](../scripts/README.md) for requirements and optional tools.
 
-Rendering runs on scroll or resize demand and pauses while hidden or offscreen. Pixel ratio is capped at 1.5. The scene disposes listeners, observers, geometry, materials, environment texture, and renderer on teardown. HMR teardown is supported. Context loss switches to the static drawing; recovery can restore rendering.
+Nineteen one-off drawing/capture experiments are archived under `scripts/archive/motion-lab/`; they are not part of the standard workflow. No scripts or historical evidence were deleted.
 
-Desktop uses two viewport heights of scroll travel; mobile uses 1.45. Adaptive bounds preserve the complete silhouette. Reduced motion removes the extra travel and pinning and renders a stationary exploded drawing. An original simplified inline SVG remains visible without JavaScript or WebGL. The heading, figure description, end section, and navigation are semantic HTML.
+## Evidence and limits
 
-Official APIs checked: [Astro route injection](https://v5.docs.astro.build/en/reference/integrations-reference/), [ExtrudeGeometry](https://threejs.org/docs/pages/ExtrudeGeometry.html), [EdgesGeometry](https://threejs.org/docs/pages/EdgesGeometry.html), [WebGLRenderer](https://threejs.org/docs/pages/WebGLRenderer.html), [RoomEnvironment](https://threejs.org/docs/pages/RoomEnvironment.html), [PMREMGenerator](https://threejs.org/docs/pages/PMREMGenerator.html). The installed Astro integration type was also checked for the `dev` command contract.
+The loading pass verified delayed initialization at 1440×900, 768×1024 and 390×844, with paired captures in `artifacts/motion-lab/loading/`. Fallback and reduced-motion bounds were checked at 320, 390, 768 and 1440 pixels. Those results are scoped to that pass, not a full release certification.
 
-## Files
+Historical reports: [initial implementation](archive/motion-lab-initial.md), [assembled appearance](motion-lab-appearance.md), [opening sequence](motion-lab-opening.md). Their measurements describe those revisions. They must not be presented as fresh performance or full-sequence results for the current code.
 
-```text
-astro.config.mjs                    development-only route injection
-package.json / package-lock.json   Three.js and types, development dependencies
-src/labs/system-core/
-  MotionLab.astro                  isolated semantic page and SVG fallback
-  motion-lab.css                   local layout, paper surface, reduced motion
-  pose.ts                         deterministic scroll model
-  pose.test.ts                    input bounds, order, reversibility
-  geometry.ts                     original modeled assembly
-  geometry.test.ts                regression test for the open aperture
-  materials.ts                    physical materials and drawing shader
-  scene.ts                        renderer, framing, scroll and cleanup
-scripts/
-  lab-captures.mjs                 five desktop/mobile progress captures
-  lab-verify.mjs                   browser, accessibility and video verification
-  lab-fallback-check.mjs           WebGL unavailable check
-  lab-performance.mjs              development scroll measurements
-  lab-production-check.mjs         production asset hashes and route exclusion
-docs/motion-lab.md                 this handoff
-artifacts/motion-lab/              local screenshots, recording, JSON reports
-```
+The next visual approval pass still needs a complete current recording and refreshed performance measurements. Physical-device Safari, touch/GPU diversity and screen-reader release checks remain outstanding. Static images can differ slightly in edge sampling from live WebGL, and dense internal lines remain harder to distinguish at phone size. No full WCAG compliance claim is made.
 
-## Executed verification
+## Prototype cleanup verification — 2026-09-11
 
-| Command or check                                                                                                 | Result                                                                                                |
-| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `npm install --save-dev three @types/three`                                                                      | Installed successfully; npm reported zero vulnerabilities                                             |
-| `npx playwright install ffmpeg`                                                                                  | Installed the supported browser video encoder                                                         |
-| `npx prettier --check astro.config.mjs package.json package-lock.json src/labs/system-core scripts/lab-*.mjs`    | Passed                                                                                                |
-| `npm run lint`                                                                                                   | Passed after qualifying browser globals in the test harness                                           |
-| `npm run check`                                                                                                  | 57 files; zero errors, warnings, or hints                                                             |
-| `npm test`                                                                                                       | 6 existing unit tests passed                                                                          |
-| `node --experimental-strip-types --test src/labs/system-core/pose.test.ts src/labs/system-core/geometry.test.ts` | 4 prototype unit tests passed                                                                         |
-| `node scripts/lab-verify.mjs`                                                                                    | 5 browser/viewport configurations passed; 20 axe scans with zero violations; zero console/page errors |
-| `node scripts/lab-fallback-check.mjs`                                                                            | WebGL disabled: SVG visible, no long runway, no console errors; one intentional fallback warning      |
-| `npm run test:browser`                                                                                           | All 36 existing portfolio tests passed across Chrome and Edge                                         |
-| `npm run build`                                                                                                  | Passed; five existing pages emitted in 1.86 seconds                                                   |
-| `node scripts/lab-production-check.mjs`                                                                          | No prototype route; all 7 production assets byte-identical to the baseline, totaling 229,255 bytes    |
-| agent-browser open / screenshot / snapshot / errors                                                              | Local route loaded and meaningful content rendered; no reported browser errors                        |
+- `npm test`: 14 passed (6 trace, 8 lab), zero failures. The default command now includes both suites.
+- `npm run lint`: passed. `npm run check`: zero errors, warnings or hints.
+- Targeted `prettier --check`: passed for changed source, package configuration, active fallback tool and documentation.
+- `npm run test:lab:browser`: passed in Edge at 320×740, 390×844, 768×1024 and 1440×900, plus Chrome at 1440×900. Slow/normal/rapid/reverse/interrupted scrolling, keyboard anchors/Back, reduced motion and no-JavaScript fallback executed. Twenty axe scans reported no violations; no application errors were recorded.
+- Disabled-WebGL check passed with expected fallback warnings. The active fallback tool now identifies the image correctly and creates its output directory on a fresh checkout.
+- The browser suite generated a forward/reverse recording as part of its existing behavior. This does not replace the separately planned final visual approval pass.
+- A separate Edge check verified “ILLUSTRATIVE · NOT TO SCALE” in the rendered drawing; `artifacts/motion-lab/cleanup-drawing.png` was visually inspected.
+- `npm run build`: passed, five production pages emitted; motion lab remains development-only.
 
-Early verification exposed and corrected a self-intersecting thin aperture, mobile clipping, and fragment navigation after runway enhancement. An aperture raycast regression test now prevents a filled front opening. Test harness whitespace and accessibility-context setup were corrected before the successful run. These early failures are not counted as passes.
-
-### Browser coverage
-
-| Browser | Viewport   | Evidence and checks                                             |
-| ------- | ---------- | --------------------------------------------------------------- |
-| Edge    | 320 × 740  | Five poses, reflow, keyboard, reduced motion, axe               |
-| Edge    | 390 × 844  | Five poses, reflow, keyboard, reduced motion, axe, SVG fallback |
-| Edge    | 768 × 1024 | Five poses, reflow, keyboard, reduced motion, axe               |
-| Edge    | 1440 × 900 | Five poses, reflow, keyboard, reduced motion, axe, recording    |
-| Chrome  | 1440 × 900 | Five poses, reflow, keyboard, reduced motion, axe               |
-
-The automated driver exercised slow and normal scrolling, rapid wheel movement, reverse scrolling, and a stopped mid-sequence pose. Screenshot equality confirmed an interrupted frame stays unchanged and reverse traversal restores the exact frame. Direct anchors, skip links, and browser Back were executed. Desktop, tablet, mobile, narrow-width, and fallback screenshots were visually inspected. Automated axe results are not a full WCAG claim.
-
-### Measurements
-
-`artifacts/motion-lab/performance.json` records an unthrottled desktop Edge run against the development server at 1440 × 900. Across 241 requested frames, the measured median frame interval was 6.10 ms, p95 was 6.40 ms, with no sampled interval over 50 ms. Total script time was 537.7 ms, total task time 854.0 ms, layout 39.9 ms, and style recalculation 96.2 ms. These are development-machine measurements, not physical-device or production frame-rate guarantees.
-
-The dev server serves approximately 6 MB for the unminified Three.js implementation module, plus development tooling. This is not an acceptable estimate of a future production bundle. Production growth in this isolated implementation is exactly zero bytes: all current production assets match their saved SHA-256 hashes. A production integration would require a separate bundle and device-performance review.
-
-The evidence recording is a 13.04-second, 1440 × 900 WebM at 25 fps, approximately 1.63 MB. Its frame rate limits judgments about high-refresh-rate smoothness.
-
-## Visual evidence
-
-- `artifacts/motion-lab/five-frame-storyboard.png`: five desktop progress frames plus the final mobile view.
-- `artifacts/motion-lab/msedge-1440-{0,25,50,75,100}.png`: full-resolution desktop frames.
-- `artifacts/motion-lab/msedge-390-{0,25,50,75,100}.png`: full-resolution mobile frames.
-- `artifacts/motion-lab/system-core-scroll.webm`: forward, stopped, and reverse traversal.
-- `artifacts/motion-lab/msedge-390-reduced.png`: reduced-motion drawing.
-- `artifacts/motion-lab/msedge-no-javascript.png` and `webgl-unavailable.png`: static fallbacks.
-- `artifacts/motion-lab/verification.json`, `fallback.json`, `performance.json`, and `production-check.json`: machine-readable results.
-
-## Three significant remaining weaknesses
-
-1. The materials still read as a stylized CAD object. More nuanced surface finish and occlusion would give the assembled state greater physical richness.
-2. The inner truss becomes dense at phone size; some fine detail merges in the final line drawing.
-3. The paper boundary is a straight horizontal scan. It preserves geometry continuity, but a more object-specific boundary could make the final transformation less diagrammatic.
-
-Manual release checks remain for Safari on physical devices, Firefox/WebKit, NVDA/VoiceOver, hardware GPU diversity, real touch scrolling, and text zoom on this isolated lab. Graphics-context restoration is implemented but has not been exercised with a real device reset. No production integration should proceed until the user visually approves this prototype.
+No integration or deployment. Physical-device and screen-reader release checks remain outstanding. Nineteen historical scripts were moved into the archive, preserving their contents and artifact paths.
