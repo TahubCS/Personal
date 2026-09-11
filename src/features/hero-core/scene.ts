@@ -25,7 +25,6 @@ export function mountHeroCore(
   const stage = figure.querySelector<HTMLElement>('.hero-core-stage');
   const host = figure.querySelector<HTMLElement>('.hero-core-canvas');
   const identity = opening.querySelector<HTMLElement>('.identity');
-  const thread = document.querySelector<HTMLElement>('.handoff-question .thread');
   if (!stage || !host || !identity) return () => {};
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('webgl2', { alpha: true, antialias: true });
@@ -152,15 +151,6 @@ export function mountHeroCore(
         ? Math.min(220, (scrollY - (start + travel)) * 0.45)
         : 0;
     figure.style.setProperty('--core-depart-y', `${depart.toFixed(1)}px`);
-    if (thread) {
-      const threadT =
-        !narrow && scrollY > start + travel
-          ? Math.min(1, Math.max(0, (scrollY - (start + travel)) / 180))
-          : narrow
-            ? 1
-            : 0;
-      thread.style.setProperty('--thread-progress', threadT.toFixed(3));
-    }
   }
   function schedule() {
     if (!frame && !disposed && visible && !document.hidden && available)
@@ -246,7 +236,6 @@ export function mountHeroCore(
     delete figure.dataset.ready;
     delete figure.dataset.progress;
     figure.style.removeProperty('--core-depart-y');
-    thread?.style.removeProperty('--thread-progress');
   }
   function pagehide(event: PageTransitionEvent) {
     if (!event.persisted) cleanup();
