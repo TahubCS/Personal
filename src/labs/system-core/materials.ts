@@ -8,7 +8,9 @@ export interface DrawingUniforms {
 }
 
 interface DrawingCutOptions {
+  readonly isInk?: boolean;
   readonly inkColor?: string;
+  readonly paperColor?: string;
   readonly targetAlpha?: number;
   readonly key?: string;
 }
@@ -19,11 +21,20 @@ function applyDrawingCut(
   uniforms: DrawingUniforms,
   options: DrawingCutOptions | boolean,
 ): void {
-  const isInk = typeof options === 'boolean' ? options : true;
+  const isInk =
+    typeof options === 'boolean'
+      ? options
+      : typeof options === 'object' && options.isInk !== undefined
+        ? options.isInk
+        : typeof options === 'object' && options.inkColor !== undefined;
   const inkColor =
     typeof options === 'object' && options.inkColor
       ? options.inkColor
       : '0.22, 0.27, 0.28';
+  const paperColor =
+    typeof options === 'object' && options.paperColor
+      ? options.paperColor
+      : '0.949, 0.937, 0.906';
   const targetAlpha =
     typeof options === 'object' && options.targetAlpha !== undefined
       ? options.targetAlpha.toFixed(2)
@@ -54,7 +65,7 @@ function applyDrawingCut(
        float proj = (uv.x * cosA + uv.y * sinA) / span;
        float pixelSize = max(fwidth(proj), 0.00005);
        float onPaper = 1.0 - smoothstep(uPaper - pixelSize * 0.75, uPaper + pixelSize * 0.75, proj);
-       gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${isInk ? inkColor : '0.949, 0.937, 0.906'}), onPaper);
+       gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${isInk ? inkColor : paperColor}), onPaper);
        gl_FragColor.a = mix(gl_FragColor.a, ${targetAlpha}, onPaper);
        if (uPaper > 0.005 && uPaper < 0.995) {
          float distToEdge = abs(proj - uPaper) / pixelSize;
@@ -142,8 +153,44 @@ export function coreMaterials(uniforms: DrawingUniforms) {
     material.polygonOffset = true;
     material.polygonOffsetFactor = 1;
     material.polygonOffsetUnits = 1;
-    applyDrawingCut(material, uniforms, false);
   }
+
+  // Multi-tone drafting surface fills (subtle CAD planar depth)
+  applyDrawingCut(graphite, uniforms, {
+    isInk: false,
+    paperColor: '0.980, 0.973, 0.953', // #faf8f3 crisp outer shell
+    key: 'core-drawing-surface-graphite',
+  });
+  applyDrawingCut(ceramic, uniforms, {
+    isInk: false,
+    paperColor: '0.929, 0.910, 0.863', // #ede8dc soft blueprint ceramic
+    key: 'core-drawing-surface-ceramic',
+  });
+  applyDrawingCut(interior, uniforms, {
+    isInk: false,
+    paperColor: '0.910, 0.886, 0.831', // #e8e2d4 recessed depth & inner steps
+    key: 'core-drawing-surface-interior',
+  });
+  applyDrawingCut(structure, uniforms, {
+    isInk: false,
+    paperColor: '0.886, 0.871, 0.824', // #e2ded2 subtle structural shading
+    key: 'core-drawing-surface-structure',
+  });
+  applyDrawingCut(copper, uniforms, {
+    isInk: false,
+    paperColor: '0.937, 0.902, 0.843', // #efe6d7 warm copper paper wash
+    key: 'core-drawing-surface-copper',
+  });
+  applyDrawingCut(perimeter, uniforms, {
+    isInk: false,
+    paperColor: '0.969, 0.922, 0.847', // #f7ebd8 warm aperture inlay
+    key: 'core-drawing-surface-perimeter',
+  });
+  applyDrawingCut(signal, uniforms, {
+    isInk: false,
+    paperColor: '0.965, 0.882, 0.745', // #f6e1be glowing amber core wash
+    key: 'core-drawing-surface-signal',
+  });
 
   applyDrawingCut(edgePrimary, uniforms, {
     inkColor: '0.10, 0.13, 0.15',
