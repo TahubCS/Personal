@@ -477,6 +477,7 @@
 /* Context Compiler Handoff (Milestone 3) */
 .trace-section {
   padding-top: 64px;
+  overflow: clip;
 }
 .trace-handoff {
   display: grid;
@@ -537,9 +538,9 @@
 .handoff-question .thread {
   position: absolute;
   width: 1px;
-  height: 96px;
+  height: 64px;
   background: var(--accent);
-  top: -96px;
+  top: -64px;
   left: 50%;
   pointer-events: none;
 }
@@ -550,17 +551,37 @@
   }
 }
 @media (max-width: 767px) {
+  .trace-section {
+    padding-top: 48px;
+  }
   .trace-handoff {
     grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+    gap: 40px;
+    margin-bottom: 32px;
+  }
+  .project-intro h2 {
+    font-size: clamp(36px, 10vw, 56px);
+    margin: 16px 0;
+  }
+  .project-intro .intro {
+    font-size: 16px;
+    line-height: 1.65;
   }
   .handoff-question {
     padding: 24px 0;
+    margin-top: 20px;
+  }
+  .handoff-question h3 {
+    font-size: clamp(28px, 8.2vw, 42px);
+    margin: 16px 0;
   }
   .handoff-question .thread {
-    height: 48px;
-    top: -48px;
-    left: 24px;
+    width: 1px;
+    height: 32px;
+    top: -32px;
+    left: 0;
+    transform: none;
+    opacity: 1;
   }
 }
 
