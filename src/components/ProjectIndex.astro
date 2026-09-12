@@ -12,7 +12,7 @@ import { projects } from '../data/projects';
       <div class="project-card">
         <div class="card-meta eyebrow">
           <span class="card-num">{project.number}</span>
-          <span class="card-cat">{project.category.split('/')[0].trim()}</span>
+          <span class="card-cat">{project.category.split('/')[0]?.trim() ?? project.category}</span>
         </div>
         <a class="project-name" href={`/work/${project.slug}/`}>
           <span>{project.name}</span>
@@ -26,7 +26,6 @@ import { projects } from '../data/projects';
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${project.name} live deployment`}
           >
             <span class="live-dot" aria-hidden="true"></span>
             <span>Live app</span>

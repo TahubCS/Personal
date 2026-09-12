@@ -2,7 +2,9 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 export default defineConfig({
   integrations: [
-    react(),
+    react({
+      include: ['**/features/context-trace/**'],
+    }),
     {
       name: 'local-motion-lab',
       hooks: {
@@ -23,4 +25,9 @@ export default defineConfig({
   ],
   output: 'static',
   devToolbar: { enabled: false },
+  vite: {
+    define: {
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    },
+  },
 });

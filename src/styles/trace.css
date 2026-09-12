@@ -409,6 +409,10 @@
   .artifact-track span {
     transition: none;
   }
+  .handoff-question .thread {
+    transform: none;
+    transition: none;
+  }
 }
 @media (max-width: 767px) {
   .trace-toolbar {
@@ -474,10 +478,8 @@
   }
 }
 
-/* Context Compiler Handoff (Milestone 3) */
 .trace-section {
   padding-top: 64px;
-  overflow: clip;
 }
 .trace-handoff {
   display: grid;
@@ -543,6 +545,9 @@
   top: -64px;
   left: 50%;
   pointer-events: none;
+  transform-origin: top center;
+  transform: scaleY(clamp(0, calc((var(--progress, 1) - 0.2) * 2), 1));
+  transition: transform 80ms linear;
 }
 @media (max-width: 1023px) {
   .trace-handoff {
