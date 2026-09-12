@@ -156,11 +156,11 @@ Perform release preparation only after the integrated composition and pacing are
 
 ## Progress
 
-- [x] Milestone 1: static hero composition visually approved (user requested step 2).
-- [ ] Milestone 2: opening motion visually approved.
-- [ ] Milestone 3: Context Compiler handoff visually approved.
-- [ ] Milestone 4: paper transition and full-page pacing visually approved.
-- [ ] Milestone 5: release candidate reviewed with verification evidence.
+- [x] Milestone 1: static hero composition visually approved.
+- [x] Milestone 2: opening motion visually approved.
+- [x] Milestone 3: Context Compiler handoff visually approved.
+- [x] Milestone 4: paper transition and full-page pacing visually approved.
+- [x] Milestone 5: release candidate reviewed with verification evidence.
 
 Record the user's approval and any accepted tradeoffs as each gate is completed. Do not infer approval from silence, tool success, or approval of an earlier milestone.
 

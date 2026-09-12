@@ -16,7 +16,7 @@ await page.evaluate(() => document.fonts.ready);
 // Track CLS
 await page.evaluate(() => {
   window.__cls = 0;
-  new PerformanceObserver((entryList) => {
+  new window.PerformanceObserver((entryList) => {
     for (const entry of entryList.getEntries()) {
       if (!entry.hadRecentInput) {
         window.__cls += entry.value;

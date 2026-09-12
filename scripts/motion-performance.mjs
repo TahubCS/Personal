@@ -8,7 +8,8 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
     viewport: { width: 1440, height: 900 },
     reducedMotion,
   });
-  await page.goto('http://127.0.0.1:4322/', { waitUntil: 'networkidle' });
+  const url = process.env.TEST_URL ?? 'http://127.0.0.1:4321/';
+  await page.goto(url, { waitUntil: 'networkidle' });
   const session = await page.context().newCDPSession(page);
   await session.send('Performance.enable');
   await page.locator('#trace').scrollIntoViewIfNeeded();
