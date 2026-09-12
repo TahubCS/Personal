@@ -5,6 +5,8 @@ test('the paper reveal follows position and returns to its previous shape', asyn
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.fonts.ready);
   const portal = page.locator('.paper-portal');
   const origin = await portal.evaluate(
     (e) => e.getBoundingClientRect().top + window.scrollY,

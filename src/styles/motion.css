@@ -175,7 +175,17 @@
   overflow: clip;
 }
 .portal-sheet {
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, rgba(23, 33, 36, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 33, 36, 0.035) 1px, transparent 1px),
+    linear-gradient(to right, rgba(23, 33, 36, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 33, 36, 0.075) 1px, transparent 1px);
+  background-size:
+    16px 16px,
+    16px 16px,
+    64px 64px,
+    64px 64px;
   color: var(--ink);
   position: absolute;
   inset: 0;
@@ -189,19 +199,56 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border-top: 4px solid var(--accent);
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 -2px 14px rgba(229, 138, 0, 0.28);
+}
+.portal-datum {
+  position: absolute;
+  font: 11px/1 var(--mono);
+  color: rgba(23, 33, 36, 0.3);
+  pointer-events: none;
+  user-select: none;
+}
+.portal-datum--tl {
+  top: 14px;
+  left: 18px;
+}
+.portal-datum--tr {
+  top: 14px;
+  right: 18px;
+}
+.portal-datum--bl {
+  bottom: 14px;
+  left: 18px;
+}
+.portal-datum--br {
+  bottom: 14px;
+  right: 18px;
 }
 .portal-sheet .eyebrow {
   color: #46575a;
 }
 .portal-word {
-  font: 500 clamp(80px, 15vw, 216px)/1.1 var(--display);
+  font: 500 clamp(52px, 14vw, 216px)/1.1 var(--display);
   letter-spacing: -0.065em;
   transform: scale(calc(0.85 + var(--progress) * 0.15));
 }
 .portal-foot {
   font: 12px var(--mono);
   margin-top: 24px;
+}
+.portal-spec {
+  font: 10px/1.2 var(--mono);
+  letter-spacing: 0.12em;
+  color: rgba(23, 33, 36, 0.4);
+  margin-top: 12px;
+  text-transform: uppercase;
+}
+@media (max-width: 480px) {
+  .portal-spec {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
 }
 .return-portal {
   --progress: 0;
@@ -221,6 +268,7 @@
     100% 100%,
     0 100%
   );
+  border-bottom: 2px solid var(--accent);
 }
 .return-portal > span {
   position: absolute;
@@ -238,6 +286,7 @@
   background: var(--accent);
   transform: scaleY(var(--progress));
   transform-origin: bottom;
+  box-shadow: 0 0 6px rgba(229, 138, 0, 0.4);
 }
 .closing-request {
   display: flex;
@@ -516,5 +565,18 @@
 @media (prefers-reduced-motion: reduce) {
   [data-motion] {
     --progress: 0 !important;
+  }
+  .portal-sheet {
+    clip-path: none !important;
+    transform: none !important;
+  }
+  .portal-word {
+    transform: none !important;
+  }
+  .return-portal::before {
+    clip-path: none !important;
+  }
+  .return-portal i {
+    transform: none !important;
   }
 }
