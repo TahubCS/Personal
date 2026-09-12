@@ -3,73 +3,183 @@ import { projects } from '../data/projects';
 ---
 
 <nav id="work" class="project-index" aria-label="Selected projects">
-  {projects.map((project) => (
-    <a href={`/work/${project.slug}/`}>
-      <span class="eyebrow">
-        {project.number} / {project.category}
-      </span>
-      <span class="project-name">
-        {project.name}
-        <span aria-hidden="true">↗</span>
-      </span>
-    </a>
-  ))}
+  <div class="project-index-header eyebrow">
+    <span>Selected systems / 01—03</span>
+    <span>Live app & study</span>
+  </div>
+  <div class="project-grid">
+    {projects.map((project) => (
+      <div class="project-card">
+        <div class="card-meta eyebrow">
+          <span class="card-num">{project.number}</span>
+          <span class="card-cat">{project.category.split('/')[0].trim()}</span>
+        </div>
+        <a class="project-name" href={`/work/${project.slug}/`}>
+          <span>{project.name}</span>
+          <span class="card-arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+        <div class="card-actions">
+          <a
+            class="project-live"
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${project.name} live deployment`}
+          >
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>Live app</span>
+            <span class="live-icon" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
 </nav>
 <style>
   .project-index {
-    grid-area: index;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
     min-width: 0;
   }
-  .project-index {
+  .project-index-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--boundary);
+    margin-bottom: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-block: 1px solid var(--line);
-    grid-column: 1/-1;
-    margin-top: 16px;
+    gap: 12px;
   }
-  .project-index a {
-    padding: 22px 24px;
-    text-decoration: none;
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    background: rgba(26, 35, 38, 0.45);
+    border-radius: 2px;
     min-width: 0;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
   }
-  .project-index a:first-child {
-    padding-left: 0;
+  .project-card:hover {
+    border-color: var(--boundary);
+    background: rgba(26, 35, 38, 0.75);
   }
-  .project-index a + a {
-    border-left: 1px solid var(--line);
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-num {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+  .card-cat {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .project-name {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 12px;
-    font: 500 24px var(--display);
-    letter-spacing: -0.035em;
-    margin-top: 8px;
+    gap: 6px;
+    font: 500 16px/1.25 var(--display);
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.025em;
+    margin-bottom: 10px;
+    transition: color 150ms ease;
   }
-  .project-name > span {
+  .project-name:hover {
     color: var(--accent);
   }
-  .eyebrow {
+  .card-arrow {
+    color: var(--boundary);
+    font-size: 13px;
+    transition:
+      transform 150ms ease,
+      color 150ms ease;
+  }
+  .project-name:hover .card-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+  .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(53, 67, 71, 0.7);
+  }
+  .project-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font: 11px/1 var(--mono);
+    color: var(--accent);
+    text-decoration: none;
+    padding: 3px 0;
+    letter-spacing: 0.02em;
+    transition: opacity 150ms ease;
+  }
+  .project-live:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+  .live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 5px var(--accent);
+  }
+  .live-icon {
     font-size: 10px;
   }
-  .project-index a:hover .project-name {
-    color: var(--accent);
+  .project-name:focus-visible,
+  .project-live:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  @media (max-width: 1099px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .project-card {
+      padding: 10px 14px;
+    }
   }
   @media (max-width: 767px) {
     .project-index {
+      margin-top: 24px;
+      padding-top: 16px;
+    }
+    .project-grid {
       grid-template-columns: 1fr;
-      margin-top: 0;
-    }
-    .project-index a,
-    .project-index a:first-child {
-      padding: 16px 0;
-    }
-    .project-index a + a {
-      border-left: 0;
-      border-top: 1px solid var(--line);
     }
     .project-name {
-      font-size: 22px;
+      font-size: 17px;
     }
   }
 </style>
